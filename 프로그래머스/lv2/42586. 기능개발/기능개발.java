@@ -5,6 +5,7 @@ import java.util.Queue;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
+
         List<Integer> result = new ArrayList<>();
 
         Queue<Integer> que = new LinkedList<>();
@@ -15,7 +16,7 @@ class Solution {
         int prevReleaseTime = 0;
         while (!que.isEmpty()) {
             int poll = que.poll();
-            int nowReleaseTime = timeToRelease(progresses[poll], speeds[poll]);
+            int nowReleaseTime = getReleaseTime(progresses[poll], speeds[poll]);
 
             if (nowReleaseTime > prevReleaseTime) {
                 if (prevReleaseTime != 0) {
@@ -31,7 +32,7 @@ class Solution {
         return result.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    private int timeToRelease(int progress, int speed) {
+    private int getReleaseTime(int progress, int speed) {
         return (int) Math.ceil((double) (100 - progress) / speed);
     }
 }
