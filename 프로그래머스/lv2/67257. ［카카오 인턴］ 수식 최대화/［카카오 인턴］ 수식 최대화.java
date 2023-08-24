@@ -1,70 +1,53 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
 class Solution {
     public long solution(String expression) {
+        StringTokenizer st = new StringTokenizer(expression, "*+-", true);
+        String[] operators = new String[]{"+*-", "+-*", "*-+", "*+-", "-+*", "-*+"};
 
-        // 연산자를 구분자로 사용하여 토큰 분리
-        StringTokenizer st = new StringTokenizer(expression, "+-*", true);
-        List<String> list = new ArrayList<>();
-        while (st.hasMoreTokens()) {
-            list.add(st.nextToken());
-        }
+        List<String> elements = new ArrayList<>();
+        while (st.hasMoreTokens())
+            elements.add(st.nextToken());
 
-        // 연산자 3개로 만들 수 있는 연산자 조합, 우선순위 적용됨
-        String[][] operators = {
-                "+-*".split(""),
-                "+*-".split(""),
-                "-+*".split(""),
-                "-*+".split(""),
-                "*+-".split(""),
-                "*-+".split("")
-        };
-
-        long max = 0;
-        for (String[] operator : operators) {
-            // 음수는 양수로 변경한다
-            long result = Math.abs(calculator(operator, new ArrayList<>(list)));
+        long max = -1;
+        for (String operator : operators) {
+            long result = Math.abs(calculate(new ArrayList<>(elements), operator));
             max = result > max ? result : max;
         }
-
+        
         return max;
     }
-    
-    private long calculator(String[] operator, List<String> list) {
-        // operator에는 연산자 우선순위가 적용된 연산자 조합이 저장되어 있다.
-        for (String op : operator) {
-            for (int i = 0; i < list.size(); i++) {
-                if (op.equals(list.get(i))) {
-                    long num1 = Long.parseLong(list.get(i - 1));
-                    long num2 = Long.parseLong(list.get(i + 1));
-                    long result = calculator(op, num1, num2);
 
-                    // 위에서 계산한 값과 연산자 제거
-                    list.remove(i - 1);
-                    list.remove(i - 1);
-                    list.remove(i - 1);
-                    // 위에서 계산한 값 추가
-                    list.add(i - 1, String.valueOf(result));
+    private long calculate(List<String> elements, String operator) {
+        for (char op : operator.toCharArray()) {
+            for (int i = 0; i < elements.size(); i++) {
+                if (elements.get(i).charAt(0) == op) {
+                    long num1 = Long.valueOf(elements.get(i - 1));
+                    long num2 = Long.valueOf(elements.get(i + 1));
+                    long result = calculate(num1, num2, op);
+
+                    elements.remove(i - 1);
+                    elements.remove(i - 1);
+                    elements.remove(i - 1);
+                    elements.add(i - 1, String.valueOf(result));
                     i -= 1;
                 }
             }
         }
-        return Long.parseLong(list.get(0));
+        return Long.valueOf(elements.get(0));
     }
 
-    // 계산
-    private long calculator(String operator, long num1, long num2) {
+    private long calculate(long num1, long num2, char operator) {
         switch (operator) {
-            case "+":
+            case '+':
                 return num1 + num2;
-            case "-":
+            case '-':
                 return num1 - num2;
-            case "*":
-                return num1 * num2;
             default:
-                return 0;
+                return num1 * num2;
         }
     }
 }
