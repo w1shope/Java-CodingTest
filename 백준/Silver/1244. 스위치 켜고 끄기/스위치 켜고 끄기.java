@@ -1,82 +1,60 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
+    private static int[] light;
+
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(br.readLine()); // 스위치 개수
+        int n = Integer.parseInt(br.readLine());
+        light = new int[n];
         String[] input = br.readLine().split(" ");
-        int[] switchs = new int[n]; // 스위치 정보
         for (int i = 0; i < n; i++)
-            switchs[i] = Integer.parseInt(input[i]);
+            light[i] = Integer.parseInt(input[i]);
 
-        int persons = Integer.parseInt(br.readLine());
-        for (int i = 0; i < persons; i++) {
+        int personNum = Integer.parseInt(br.readLine());
+        for (int i = 0; i < personNum; i++) {
             input = br.readLine().split(" ");
             int gender = Integer.parseInt(input[0]);
-            int switchNum = Integer.parseInt(input[1]) - 1;
-
-            if (gender == 1)
-                stateChangeByMan(switchs, switchNum);
-            else
-                stateChangeByWomen(switchs, switchNum);
+            int num = Integer.parseInt(input[1]);
+            changeSwitch(gender, num);
         }
 
         int count = 0;
         for (int i = 0; i < n; i++) {
-            if(count == 20) {
+            if (count == 20) {
                 sb.append("\n");
                 count = 0;
             }
-            sb.append(switchs[i] + " ");
+            sb.append(light[i] + " ");
             count++;
         }
-
         System.out.println(sb);
     }
 
-    private static void stateChangeByMan(int[] switchs, int switchNum) {
-        for (int i = switchNum; i < switchs.length; i += switchNum + 1) {
-            if (switchs[i] == 1)
-                switchs[i] = 0;
-            else
-                switchs[i] = 1;
-        }
-    }
-
-    private static void stateChangeByWomen(int[] switchs, int switchNum) {
-        int count = 1;
-        while (true) {
-            int leftSwitchNum = switchNum - count;
-            int rightSwitchNum = switchNum + count;
-
-            if (leftSwitchNum < 0 || rightSwitchNum >= switchs.length)
+    private static void changeSwitch(int gender, int num) {
+        switch (gender) {
+            case 1:
+                for (int i = num - 1; i < light.length; i += num)
+                    light[i] = light[i] == 1 ? 0 : 1;
                 break;
-
-            if (switchs[leftSwitchNum] == switchs[rightSwitchNum]) {
-                if (switchs[leftSwitchNum] == 1)
-                    switchs[leftSwitchNum] = 0;
-                else
-                    switchs[leftSwitchNum] = 1;
-
-                if (switchs[rightSwitchNum] == 1)
-                    switchs[rightSwitchNum] = 0;
-                else
-                    switchs[rightSwitchNum] = 1;
-            } else
-                break;
-
-            count += 1;
+            default:
+                light[num - 1] = light[num - 1] == 1 ? 0 : 1;
+                for (int i = 1; ; i++) {
+                    if ((num - 1) - i < 0 || (num - 1) + i >= light.length)
+                        return;
+                    int num1 = (num - 1) - i;
+                    int num2 = (num - 1) + i;
+                    if (light[num1] != light[num2]) {
+                        return;
+                    } else {
+                        light[num1] = light[num1] == 1 ? 0 : 1;
+                        light[num2] = light[num2] == 1 ? 0 : 1;
+                    }
+                }
         }
-
-        if (switchs[switchNum] == 1)
-            switchs[switchNum] = 0;
-        else
-            switchs[switchNum] = 1;
     }
 }
