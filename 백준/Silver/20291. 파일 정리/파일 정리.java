@@ -15,19 +15,10 @@ public class Main {
             String input = br.readLine();
             String extension = input.substring(input.indexOf(".") + 1);
 
-            if (map.containsKey(extension))
-                map.put(extension, map.get(extension) + 1);
-            else
-                map.put(extension, 1);
+            map.put(extension, map.getOrDefault(extension, 0) + 1);
         }
 
-        List<String> extensions = new ArrayList<>(map.keySet());
-        Collections.sort(extensions);
-
-        for (String s : extensions) {
-            sb.append(s + " " + map.get(s) + "\n");
-        }
-
+        map.keySet().stream().sorted().forEach(extension -> sb.append(extension + " " + map.get(extension) + "\n"));
         System.out.println(sb);
     }
 }
