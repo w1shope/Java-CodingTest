@@ -38,10 +38,7 @@ public class Main {
             int ny = y + dy[d];
             int nx = x + dx[d];
             if (ny < 0 || ny >= map.length || nx < 0 || nx >= map[ny].length || map[ny][nx] != 0) {
-                if (d == 3)
-                    d = 0;
-                else
-                    d += 1;
+                d = (d + 1) % 4;
                 continue;
             }
             map[ny][nx] = startNum--;
