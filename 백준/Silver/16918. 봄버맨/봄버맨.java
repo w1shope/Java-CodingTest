@@ -46,6 +46,9 @@ public class Main {
         System.out.println(sb);
     }
 
+    /**
+     * 숫자 0이 아니라 알파벳 대문자 'O'입니다.
+    */
     private static void fillBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
