@@ -15,7 +15,7 @@ public class Main {
         int x = Integer.parseInt(br.readLine());
 
         int[] arr = set.stream().mapToInt(Integer::intValue).toArray();
-        Arrays.parallelSort(arr);
+        Arrays.sort(arr);
 
         int count = 0;
         for (int i = 0; i < n; i++) {
