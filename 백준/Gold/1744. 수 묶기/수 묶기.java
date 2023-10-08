@@ -22,31 +22,52 @@ public class Main {
                 negativeNumbers.add(num);
         }
 
+        // 양수를 갖는 list는 내림차순 정렬
         Collections.sort(positiveNumbers, Comparator.reverseOrder());
+        // 음수 갖는 list는 오름차순 정렬
         Collections.sort(negativeNumbers);
 
         long sum = 0L;
         while (positiveNumbers.size() >= 2) {
             int num1 = positiveNumbers.remove(0);
             int num2 = positiveNumbers.remove(0);
-            if (num1 == 1 || num2 == 1) {
-                sum += num1;
-                sum += num2;
-            } else
-                sum += num1 * num2;
+            sum += calculatePositiveNum(num1, num2);
         }
         if (!positiveNumbers.isEmpty())
-            sum += positiveNumbers.get(0);
+            sum += calculatePositiveNum(positiveNumbers.get(0));
 
         while (negativeNumbers.size() >= 2) {
             int num1 = negativeNumbers.remove(0);
             int num2 = negativeNumbers.remove(0);
-            if (num1 < 0 && num2 < 0)
-                sum += num1 * num2;
+            sum += calculateNegativeNum(num1, num2);
         }
         if (!negativeNumbers.isEmpty())
-            sum += negativeNumbers.get(0);
+            sum += calculateNegativeNum(negativeNumbers.get(0));
 
         System.out.println(sum);
+    }
+
+    // 양수인 경우
+    private static int calculatePositiveNum(int... args) {
+        if (args.length >= 2) {
+            if (args[0] == 1 || args[1] == 1) {
+                return args[0] + args[1];
+            } else
+                return args[0] * args[1];
+        } else {
+            return args[0];
+        }
+    }
+
+    // 음수인 경우
+    private static int calculateNegativeNum(int... args) {
+        if (args.length >= 2) {
+            if (args[0] < 0 && args[1] < 0)
+                return args[0] * args[1];
+            else
+                return 0;
+        } else {
+            return args[0];
+        }
     }
 }
