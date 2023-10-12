@@ -18,6 +18,7 @@ public class Main {
 
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 5; j++) {
+                // '\0' : 문자열의 끝
                 if (inputs[j][i] == '\0') {
                     continue;
                 } else
