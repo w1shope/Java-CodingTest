@@ -13,13 +13,12 @@ int main() {
 
     set<string> set;
 
-    string str = "";
     for (int i = 0; i < s.size(); i++) {
+        string str = "";
         for (int j = i; j < s.size(); j++) {
             str += s.at(j);
             set.insert(str);
         }
-        str = "";
     }
 
     cout << set.size();
