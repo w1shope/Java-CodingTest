@@ -19,9 +19,8 @@ public class Main {
                 for (int j = i + 1; j < numbers.length - 1; j++) {
                     for (int k = j + 1; k < numbers.length; k++) {
                         int number = numbers[i] + numbers[j] + numbers[k];
-                        String strNumber = String.valueOf(number);
-                        int lastNumber = strNumber.charAt(strNumber.length() - 1) - '0';
-                        if (lastNumber > bigLastNumber) {
+                        int lastNumber = number %  10;
+                        if(lastNumber > bigLastNumber) {
                             bigLastNumber = lastNumber;
                         }
                     }
