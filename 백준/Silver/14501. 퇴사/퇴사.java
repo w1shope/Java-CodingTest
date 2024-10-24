@@ -5,28 +5,50 @@ import java.util.Arrays;
 
 public class Main {
 
+    static int N;
+    static Counseling[] counselings;
+    static int result;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int[] t = new int[n];
-        int[] p = new int[n];
-        for (int i = 0; i < n; i++) {
-            String[] input = br.readLine().split(" ");
-            t[i] = Integer.parseInt(input[0]);
-            p[i] = Integer.parseInt(input[1]);
+
+        N = Integer.parseInt(br.readLine());
+        counselings = new Counseling[N];
+        for (int i = 0; i < N; i++) {
+            int[] inputArr = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::valueOf)
+                    .toArray();
+            counselings[i] = new Counseling(inputArr[0], inputArr[1]);
         }
 
-        int[] dp = new int[n + 1];
-        for (int i = 0; i < n; i++) {
-            if (i + t[i] <= n)
-                dp[i + t[i]] = Math.max(dp[i + t[i]], dp[i] + p[i]);
-            dp[i + 1] = Math.max(dp[i], dp[i + 1]);
-        }
+        recur(0, 0);
 
-        System.out.println(
-                Arrays.stream(dp)
-                        .max()
-                        .getAsInt()
-        );
+        System.out.println(result);
     }
+
+    static void recur(int possibleCounselingDay, int price) {
+        if (possibleCounselingDay >= N) {
+            result = Math.max(result, price);
+            return;
+        }
+
+        Counseling counseling = counselings[possibleCounselingDay];
+
+        if (possibleCounselingDay + counseling.day <= N) { // 오늘부터 상담을 시작해서, 상담을 마칠 때까지 퇴사하지 않는 다면 
+            recur(possibleCounselingDay + counseling.day, price + counseling.price);
+        }
+        recur(possibleCounselingDay + 1, price); // 오늘 상담 진행 X
+    }
+
+
+    static class Counseling {
+        int day;
+        int price;
+
+        public Counseling(int day, int price) {
+            this.day = day;
+            this.price = price;
+        }
+    }
+
 }
