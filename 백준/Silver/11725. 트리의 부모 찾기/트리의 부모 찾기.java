@@ -3,44 +3,61 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Main {
-    private static List<List<Integer>> graph = new ArrayList<>();
-    private static boolean[] visited;
-    private static int[] result;
+
+    static int N;
+    static List<List<Integer>> nodes = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(br.readLine());
-        for (int i = 0; i <= n; i++)
-            graph.add(new ArrayList<>());
-        visited = new boolean[n + 1];
-        result = new int[n + 1];
-
-        for (int i = 0; i < n - 1; i++) {
-            String[] input = br.readLine().split(" ");
-            int v1 = Integer.parseInt(input[0]);
-            int v2 = Integer.parseInt(input[1]);
-            graph.get(v1).add(v2);
-            graph.get(v2).add(v1);
+        N = Integer.parseInt(br.readLine());
+        for (int i = 0; i <= N; i++) {
+            nodes.add(new ArrayList<>());
         }
 
-        dfs(1);
+        for (int i = 0; i < N - 1; i++) {
+            int[] inputArr = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::valueOf)
+                    .toArray();
+            int v1 = inputArr[0];
+            int v2 = inputArr[1];
+            nodes.get(v1).add(v2);
+            nodes.get(v2).add(v1);
+        }
 
-        Arrays.stream(result).skip(2).forEach(v -> sb.append(v + "\n"));
+        int[] arr = new int[N + 1];
+        bfs(1, new boolean[N + 1], arr);
+
+        for (int i = 2; i <= N; i++) {
+            sb.append(arr[i] + "\n");
+        }
+
         System.out.println(sb);
     }
 
-    private static void dfs(int v) {
-        visited[v] = true;
-        for (int node : graph.get(v)) {
-            if (!visited[node]) {
-                result[node] = v;
-                dfs(node);
+    static void bfs(int v, boolean[] visited, int[] arr) {
+        visited[v] = true; // 현재 노드 방문 처리
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(v);
+
+        while (!que.isEmpty()) {
+            int poll = que.poll();
+            for (int node : nodes.get(poll)) {
+                if (visited[node]) {
+                    continue;
+                }
+                visited[node] = true;
+                que.offer(node);
+                arr[node] = poll;
             }
         }
     }
+
+
 }
