@@ -1,27 +1,53 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Arrays;
 
 public class Main {
-    static Queue<Integer> que = new PriorityQueue<>();
+
+    static int N, M;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
-        String[] input = br.readLine().split(" ");
-        int n = Integer.parseInt(input[0]);
-        int m = Integer.parseInt(input[1]);
+        int[] inputArr = Arrays.stream(br.readLine().split(" "))
+                .mapToInt(Integer::valueOf)
+                .toArray();
+        N = inputArr[0];
+        M = inputArr[1];
 
-        for (String num : br.readLine().split(" "))
-            que.offer(Integer.parseInt(num));
+        int[] arrA = Arrays.stream(br.readLine().split(" "))
+                .mapToInt(Integer::valueOf)
+                .toArray();
 
-        for (String num : br.readLine().split(" "))
-            que.offer(Integer.parseInt(num));
-        
-        while (!que.isEmpty())
-            sb.append(que.poll() + " ");
+        int[] arrB = Arrays.stream(br.readLine().split(" "))
+                .mapToInt(Integer::valueOf)
+                .toArray();
+
+        int[] answer = new int[N + M];
+        int pA = 0, pB = 0; // 배열 A와 B를 가리키는 포인터
+        int answerIdx = 0; // 출력할 배열의 인덱스
+        while (pA < N && pB < M) {
+            if (arrA[pA] > arrB[pB]) {
+                answer[answerIdx++] = arrB[pB++];
+            } else {
+                answer[answerIdx++] = arrA[pA++];
+            }
+        }
+
+        if (pA == N) {
+            for (int i = pB; i < M; i++) {
+                answer[answerIdx++] = arrB[i];
+            }
+        } else {
+            for (int i = pA; i < N; i++) {
+                answer[answerIdx++] = arrA[i];
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int num : answer) {
+            sb.append(num + " ");
+        }
 
         System.out.println(sb);
     }
