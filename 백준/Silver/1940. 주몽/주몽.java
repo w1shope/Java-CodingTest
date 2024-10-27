@@ -4,30 +4,29 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class Main {
+
+    static int N, M;
+    static int[] arr;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
+        arr = Arrays.stream(br.readLine().split(" "))
+                .mapToInt(Integer::valueOf)
+                .toArray();
 
-        int n = Integer.parseInt(br.readLine());
-        int m = Integer.parseInt(br.readLine());
-
-        String[] inputs = br.readLine().split(" ");
-        int[] arr = Arrays.stream(inputs).mapToInt(Integer::parseInt).toArray();
         Arrays.sort(arr);
 
-        int left = 0;
-        int right = n - 1;
-        int count = 0;
-        while (left < right) {
-            int sum = arr[left] + arr[right];
-            if (sum == m) {
-                count++;
-                left++;
-                right--;
-            } else if (sum > m)
-                right--;
-            else if (sum < m)
-                left++;
+        int answer = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) {
+                if (arr[i] + arr[j] == M) {
+                    answer += 1;
+                }
+            }
         }
-        System.out.println(count);
+
+        System.out.println(answer);
     }
 }
