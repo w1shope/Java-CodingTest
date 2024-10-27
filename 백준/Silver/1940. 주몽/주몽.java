@@ -19,11 +19,16 @@ public class Main {
         Arrays.sort(arr);
 
         int answer = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = i + 1; j < N; j++) {
-                if (arr[i] + arr[j] == M) {
-                    answer += 1;
-                }
+        int s = 0, e = N - 1;
+        while (s < e) { // 같은 재료로 갑옷을 만들 수 없다.
+            int sum = arr[s] + arr[e];
+            if (sum == M) { // 갑옷을 만들 수 있다.
+                answer++;
+                s++;
+            } else if (sum < M) {
+                s++;
+            } else {
+                e--;
             }
         }
 
