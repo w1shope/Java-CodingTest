@@ -40,8 +40,7 @@ public class Main {
         answer = new int[N + 1];
         Arrays.fill(answer, -1);
 
-        boolean[] visited = new boolean[N + 1];
-        bfs(R, visited, 0);
+        bfs(R);
 
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= N; i++) {
@@ -51,28 +50,20 @@ public class Main {
         System.out.println(sb);
     }
 
-    static void bfs(int node, boolean[] visited, int visitOrder) {
-        visited[node] = true;
-        answer[node] = visitOrder++;
+    static void bfs(int startNode) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(startNode);
+        answer[startNode] = 0; // 시작 노드는 거리가 0
 
-        Queue<Integer> que = new LinkedList<>();
-        que.offer(node);
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            int currentDepth = answer[current]; // 현재 노드의 깊이
 
-        Queue<Integer> tmp = new LinkedList<>();
-        while (!que.isEmpty()) {
-            while (!que.isEmpty()) {
-                int poll = que.poll();
-                for (int v : nodes.get(poll)) {
-                    if (!visited[v]) {
-                        visited[v] = true;
-                        tmp.offer(v);
-                        answer[v] = visitOrder;
-                    }
+            for (int nextNode : nodes.get(current)) {
+                if (answer[nextNode] == -1) { // 방문하지 않은 노드만 처리
+                    answer[nextNode] = currentDepth + 1;
+                    queue.offer(nextNode);
                 }
-            }
-            visitOrder++;
-            while (!tmp.isEmpty()) {
-                que.offer(tmp.poll());
             }
         }
     }
