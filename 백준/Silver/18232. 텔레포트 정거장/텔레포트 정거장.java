@@ -11,9 +11,7 @@ public class Main {
 
     static int N, M;
     static int S, E;
-
     static List<List<Integer>> nodes = new ArrayList<>();
-    static int answer;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,15 +21,15 @@ public class Main {
         N = inputArr[0];
         M = inputArr[1];
 
+        for (int i = 0; i <= N; i++) {
+            nodes.add(new ArrayList<>());
+        }
+
         inputArr = Arrays.stream(br.readLine().split(" "))
                 .mapToInt(Integer::valueOf)
                 .toArray();
         S = inputArr[0];
         E = inputArr[1];
-
-        for (int i = 0; i <= N; i++) {
-            nodes.add(new ArrayList<>());
-        }
 
         for (int i = 0; i < M; i++) {
             inputArr = Arrays.stream(br.readLine().split(" "))
@@ -43,42 +41,39 @@ public class Main {
             nodes.get(v2).add(v1);
         }
 
-        answer = E - S;
-        int result = bfs(S, E);
-
-        System.out.println(result);
+        System.out.println(bfs(0, S));
     }
 
-    static int bfs(int start, int end) {
-        Queue<int[]> queue = new LinkedList<>();
+    static int bfs(int moveCount, int startNode) {
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{startNode, moveCount}); // 방문 노드, 이동 횟수
+
         boolean[] visited = new boolean[N + 1];
-        queue.offer(new int[]{start, 0});
-        visited[start] = true;
+        visited[startNode] = true;
+        while (!que.isEmpty()) {
+            int[] poll = que.poll();
+            int v = poll[0];
 
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll();
-            int v = current[0];
-            int moveCount = current[1];
-
-            if (v == end) {
-                return moveCount;
+            if (v == E) {
+                return poll[1];
             }
 
             if (v - 1 >= 0 && !visited[v - 1]) {
-                queue.offer(new int[]{v - 1, moveCount + 1}); // 왼쪽으로 1칸 이동
                 visited[v - 1] = true;
+                que.offer(new int[]{v - 1, poll[1] + 1});
             }
             if (v + 1 <= N && !visited[v + 1]) {
-                queue.offer(new int[]{v + 1, moveCount + 1}); // 오른쪽으로 1칸 이동
                 visited[v + 1] = true;
+                que.offer(new int[]{v + 1, poll[1] + 1});
             }
             for (int node : nodes.get(v)) {
                 if (!visited[node]) {
-                    queue.offer(new int[]{node, moveCount + 1}); // 텔레포트 
                     visited[node] = true;
+                    que.offer(new int[]{node, poll[1] + 1});
                 }
             }
         }
-        return -1; // 도달 불가능한 경우
+        return -1;
     }
+
 }
