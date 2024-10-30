@@ -15,16 +15,14 @@ public class Main {
             int[] numbers = Arrays.stream(br.readLine().split(" "))
                     .mapToInt(Integer::valueOf)
                     .toArray();
-            int answer = Integer.MIN_VALUE;
-            for (int i = 0; i < N; i++) {
-                int tmp = 0;
-                for (int j = i; j < N; j++) {
-                    tmp += numbers[j];
-                    answer = Math.max(answer, tmp);
-                }
+            int currentMaxSum = numbers[0];
+            int resultMaxSum = currentMaxSum;
+            for (int i = 1; i < N; i++) {
+                currentMaxSum = Math.max(currentMaxSum + numbers[i], numbers[i]);
+                resultMaxSum = Math.max(resultMaxSum, currentMaxSum);
             }
 
-            sb.append(answer + "\n");
+            sb.append(resultMaxSum + "\n");
         }
 
         System.out.println(sb);
