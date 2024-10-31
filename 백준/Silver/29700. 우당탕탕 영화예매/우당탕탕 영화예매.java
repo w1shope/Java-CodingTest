@@ -26,12 +26,10 @@ public class Main {
                         answer += 1 + (zeroCount - K);
                     }
                     zeroCount = 0;
-                } else if (str.charAt(j) == '0') {
+                } else {
                     zeroCount++;
-                    if (j == M - 1) {
-                        if (zeroCount >= K) {
-                            answer += 1 + (zeroCount - K);
-                        }
+                    if (j == M - 1 && zeroCount >= K) {
+                        answer += 1 + (zeroCount - K);
                     }
                 }
             }
