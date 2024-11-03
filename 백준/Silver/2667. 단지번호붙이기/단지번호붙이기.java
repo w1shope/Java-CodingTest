@@ -12,7 +12,6 @@ public class Main {
     static List<Integer> answer = new ArrayList<>();
     static int[] dx = {0, 0, -1, 1};
     static int[] dy = {-1, 1, 0, 0};
-    static int count;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,9 +30,8 @@ public class Main {
         for (int y = 0; y < N; y++) {
             for (int x = 0; x < N; x++) {
                 if (!visited[y][x] && arr[y][x] == 1) {
-                    dfs(x, y, visited);
+                    int count = dfs(x, y, visited);
                     answer.add(count);
-                    count = 0;
                 }
             }
         }
@@ -48,24 +46,20 @@ public class Main {
         System.out.println(sb);
     }
 
-    static void dfs(int x, int y, boolean[][] visited) {
-        if (isOutOfRange(x, y)) {
-            return;
-        }
-        if (visited[y][x]) {
-            return;
-        }
-        if (arr[y][x] == 0) {
-            return;
+    static int dfs(int x, int y, boolean[][] visited) {
+        if (isOutOfRange(x, y) || visited[y][x] || arr[y][x] == 0) {
+            return 0;
         }
 
         visited[y][x] = true;
-        count += 1;
+        int count = 1;
         for (int d = 0; d < 4; d++) {
             int cx = x + dx[d];
             int cy = y + dy[d];
-            dfs(cx, cy, visited);
+            count += dfs(cx, cy, visited);
         }
+
+        return count;
     }
 
     static boolean isOutOfRange(int x, int y) {
