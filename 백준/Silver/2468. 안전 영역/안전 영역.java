@@ -32,7 +32,17 @@ public class Main {
         for (int value = smallRainValue; value <= bigRainValue; value++) {
             boolean[][] visited = new boolean[N][N]; // 침수 : true
             init(visited, value);
-            answer = Math.max(answer, bfs(visited));
+
+            int count = 0; // 영역 개수
+            for (int y = 0; y < N; y++) {
+                for (int x = 0; x < N; x++) {
+                    if (!visited[y][x]) {
+                        bfs(visited, x, y);
+                        count += 1;
+                    }
+                }
+            }
+            answer = Math.max(answer, count);
         }
 
         System.out.println(answer);
@@ -48,31 +58,21 @@ public class Main {
         }
     }
 
-    static int bfs(boolean[][] visited) {
-        int count = 0; // 영역 개수
-        for (int y = 0; y < N; y++) {
-            for (int x = 0; x < N; x++) {
-                if (!visited[y][x]) { // 침수된 지역이 아닌 경우
-                    Queue<int[]> que = new LinkedList<>();
-                    que.offer(new int[]{x, y});
-                    visited[y][x] = true;
-                    while (!que.isEmpty()) {
-                        int[] position = que.poll();
-                        for (int d = 0; d < 4; d++) {
-                            int cx = position[0] + dx[d];
-                            int cy = position[1] + dy[d];
-                            if (isNotOutOfRange(cx, cy) && !visited[cy][cx]) {
-                                visited[cy][cx] = true;
-                                que.offer(new int[]{cx, cy});
-                            }
-                        }
-                    }
-                    count++;
+    static void bfs(boolean[][] visited, int x, int y) {
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{x, y});
+        visited[y][x] = true;
+        while (!que.isEmpty()) {
+            int[] position = que.poll();
+            for (int d = 0; d < 4; d++) {
+                int cx = position[0] + dx[d];
+                int cy = position[1] + dy[d];
+                if (isNotOutOfRange(cx, cy) && !visited[cy][cx]) {
+                    visited[cy][cx] = true;
+                    que.offer(new int[]{cx, cy});
                 }
             }
         }
-
-        return count;
     }
 
     static boolean isNotOutOfRange(int x, int y) {
