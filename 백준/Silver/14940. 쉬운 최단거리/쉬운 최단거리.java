@@ -22,33 +22,29 @@ public class Main {
         M = inputArr[1];
 
         arr = new int[N][M];
+        answer = new int[N][M];
         int targetX = -1;
         int targetY = -1;
         for (int i = 0; i < N; i++) {
             String[] str = br.readLine().split(" ");
             for (int j = 0; j < M; j++) {
                 int num = Integer.parseInt(str[j]);
+                arr[i][j] = num;
                 if (num == 2) {
                     targetX = j;
                     targetY = i;
+                } else if (num == 1) {
+                    answer[i][j] = -1;
                 }
-                arr[i][j] = num;
             }
         }
-
-        answer = new int[N][M];
-        answer[targetY][targetX] = 0;
 
         bfs(targetX, targetY);
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (arr[i][j] == 1) {
-                    sb.append(-1 + " ");
-                } else {
-                    sb.append(answer[i][j] + " ");
-                }
+                sb.append(answer[i][j] + " ");
             }
             sb.append("\n");
         }
@@ -59,18 +55,19 @@ public class Main {
     static void bfs(int startX, int startY) {
         int count = 0;
         Queue<int[]> que = new LinkedList<>();
-        que.offer(new int[]{startX, startY, count});
+        que.offer(new int[]{startX, startY});
         arr[startY][startX] = 0;
 
         while (!que.isEmpty()) {
             int[] pos = que.poll();
+            int x = pos[0];
+            int y = pos[1];
             for (int d = 0; d < 4; d++) {
-                int cx = pos[0] + dx[d];
-                int cy = pos[1] + dy[d];
-                if (isNotOutOfRange(cx, cy) && arr[cy][cx] == 1) {
-                    answer[cy][cx] = pos[2] + 1;
-                    que.offer(new int[]{cx, cy, pos[2] + 1});
-                    arr[cy][cx] = 0;
+                int cx = x + dx[d];
+                int cy = y + dy[d];
+                if (isNotOutOfRange(cx, cy) && answer[cy][cx] == -1) {
+                    answer[cy][cx] = answer[y][x] + 1;
+                    que.offer(new int[]{cx, cy});
                 }
             }
         }
