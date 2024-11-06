@@ -1,29 +1,38 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        Scanner sc = new Scanner(System.in);
+        System.out.println(bfs(sc.nextInt()));
+    }
 
-        int n = Integer.parseInt(br.readLine());
-        int count = 0;
-
-        while (true) {
-            if (n % 5 == 0) {
-                count += (n / 5);
-                break;
-            } else {
-                n -= 2;
-                count++;
+    static int bfs(int money) {
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{money, 0}); // {남은 잔액, 동전 개수}
+        boolean[] visited = new boolean[money + 1];
+        while (!que.isEmpty()) {
+            int[] poll = que.poll();
+            int remainMoney = poll[0];
+            int exchangeCoin = poll[1];
+            if (remainMoney == 0) {
+                return exchangeCoin;
             }
 
-            if (n < 0) {
-                count = -1;
-                break;
+            // 5원으로 거슬러 준다
+            if (remainMoney - 5 >= 0 && !visited[remainMoney - 5]) {
+                que.offer(new int[]{remainMoney - 5, exchangeCoin + 1});
+                visited[remainMoney - 5] = true;
+            }
+            // 2원으로 거슬러 준다
+            if (remainMoney - 2 >= 0 && !visited[remainMoney - 2]) {
+                que.offer(new int[]{remainMoney - 2, exchangeCoin + 1});
+                visited[remainMoney - 2] = true;
             }
         }
 
-        System.out.println(count);
+        return -1;
     }
 }
