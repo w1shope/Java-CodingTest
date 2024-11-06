@@ -44,7 +44,6 @@ class Solution {
     }
 
     static void put(int x, int y, int color) {
-        arr[y][x] = color;
         // color 색 돌을 놓으려는 위치의 인접한 곳에 반대 color 색의 돌가 있는가?
         int oppositeColor = color == 1 ? 2 : 1;
 
@@ -57,6 +56,7 @@ class Solution {
                 // 같은 행에 있는 돌 중에서, 자신의 돌 사이에 있는 모든 돌의 색을,
                 // 본인 색으로 바꿀 수 있다면
                 if (canFlip(cx, cy, dx[d], dy[d], color)) {
+                    arr[y][x] = color;
                     flip(cx, cy, dx[d], dy[d], color);
                 }
             }
