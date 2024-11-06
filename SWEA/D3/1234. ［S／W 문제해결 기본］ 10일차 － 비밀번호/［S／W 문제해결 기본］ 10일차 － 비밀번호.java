@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 class Solution {
     public static void main(String[] args) throws IOException {
@@ -17,28 +16,18 @@ class Solution {
     }
 
     static String answer(String str) {
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < str.length(); i++) {
-            result.add(str.charAt(i) - '0');
-        }
-
-        int idx = 0;
-        while (true) {
-            if (result.get(idx) == result.get(idx + 1)) {
-                result.remove(idx);
-                result.remove(idx);
-                idx = 0;
+        Stack<Character> stack = new Stack<>();
+        for (char c : str.toCharArray()) {
+            if (!stack.isEmpty() && stack.peek() == c) {
+                stack.pop();
             } else {
-                idx++;
-            }
-            if (idx == result.size() - 1) {
-                break;
+                stack.push(c);
             }
         }
 
         StringBuilder word = new StringBuilder();
-        for (int i = 0; i < result.size(); i++) {
-            word.append(result.get(i));
+        for (char c : stack) {
+            word.append(c);
         }
         return word.toString();
     }
