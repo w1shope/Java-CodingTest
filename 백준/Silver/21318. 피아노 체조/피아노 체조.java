@@ -4,46 +4,40 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class Main {
-    private static int[] arr;
-    private static int[] mistake;
+
+    static int N, M;
+    static int[] arr;
+    static int[] prefixSum;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        int n = Integer.parseInt(br.readLine());
-        arr = new int[n + 1];
-        mistake = new int[n + 1];
-        String[] input = br.readLine().split(" ");
-        for (int i = 1; i <= n; i++)
-            arr[i] = Integer.parseInt(input[i - 1]);
+        N = Integer.parseInt(br.readLine());
 
-        setMistakeCount();
-
-        int q = Integer.parseInt(br.readLine());
-        for (int i = 0; i < q; i++) {
-            input = br.readLine().split(" ");
-            int x = Integer.parseInt(input[0]);
-            int y = Integer.parseInt(input[1]);
-            sb.append(getMistakeCount(x, y) + "\n");
+        arr = new int[N + 1];
+        int[] inputs = Arrays.stream(br.readLine().split(" "))
+                .mapToInt(Integer::valueOf)
+                .toArray();
+        for (int i = 0; i < N; i++) {
+            arr[i + 1] = inputs[i];
         }
 
-        System.out.println(sb);
-    }
-
-    private static void setMistakeCount() {
-        int count = 0;
-        for (int i = 1; i < arr.length - 1; i++) {
-            if (arr[i] > arr[i + 1])
-                mistake[i] = ++count;
-            else
-                mistake[i] = count;
+        int sum = 0;
+        prefixSum = new int[N + 1];
+        for (int i = 1; i < N; i++) {
+            prefixSum[i] = prefixSum[i - 1] + (arr[i] > arr[i + 1] ? 1 : 0);
         }
-        mistake[mistake.length - 1] = count;
-    }
+        prefixSum[N] = prefixSum[N - 1];
 
-    private static int getMistakeCount(int x, int y) {
-        if (x == y)
-            return 0;
-        return mistake[y - 1] - mistake[x - 1];
+        M = Integer.parseInt(br.readLine());
+        StringBuilder answer = new StringBuilder();
+        for (int i = 0; i < M; i++) {
+            inputs = Arrays.stream(br.readLine().split(" "))
+                    .mapToInt(Integer::valueOf)
+                    .toArray();
+            int x = inputs[0];
+            int y = inputs[1]; // x <= i < y
+            answer.append(prefixSum[y - 1] - prefixSum[x - 1]).append("\n");
+        }
+        System.out.println(answer);
     }
 }
