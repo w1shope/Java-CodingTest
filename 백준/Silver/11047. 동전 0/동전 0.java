@@ -2,29 +2,33 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int[] inputs = Arrays.stream(br.readLine().split(" "))
+                .mapToInt(Integer::valueOf)
+                .toArray();
 
-        String[] input = br.readLine().split(" ");
-        int n = Integer.parseInt(input[0]);
-        int k = Integer.parseInt(input[1]);
+        int n = inputs[0];
+        int k = inputs[1];
 
-        Integer[] coin = new Integer[n];
+        int[] coins = new int[n];
         for (int i = 0; i < n; i++) {
-            coin[i] = Integer.parseInt(br.readLine());
+            coins[i] = Integer.parseInt(br.readLine());
         }
 
-        Arrays.sort(coin, Comparator.reverseOrder());
-        int count = 0;
-        for (int i = 0; i < n; i++) {
-            count += k / coin[i];
-            k %= coin[i];
+        Arrays.sort(coins);
+
+        int coinCount = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            if (k == 0) {
+                break;
+            }
+            coinCount += k / coins[i];
+            k %= coins[i];
         }
 
-        System.out.println(count);
+        System.out.println(coinCount);
     }
 }
