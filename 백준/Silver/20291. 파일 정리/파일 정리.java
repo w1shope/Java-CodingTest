@@ -10,7 +10,7 @@ import java.util.Map;
 public class Main {
 
     static int N;
-    static Map<String, Extension> map = new HashMap<>();
+    static Map<String, Integer> map = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,36 +19,17 @@ public class Main {
         for (int i = 0; i < N; i++) {
             String[] splits = br.readLine().split("\\.");
             String extension = splits[1];
-            if (map.containsKey(extension)) {
-                map.get(extension).count += 1;
-            } else {
-                map.put(extension, new Extension(extension, 1));
-            }
+            map.put(extension, map.getOrDefault(extension, 0) + 1);
         }
 
-        List<Extension> extensions = new ArrayList<>(map.values());
+        List<String> extensions = new ArrayList<>(map.keySet());
         Collections.sort(extensions);
 
         StringBuilder answer = new StringBuilder();
-        for (Extension extension : extensions) {
-            answer.append(extension.name + " " + extension.count).append("\n");
+        for (String extension : extensions) {
+            answer.append(extension + " " + map.get(extension)).append("\n");
         }
 
         System.out.println(answer);
-    }
-
-    static class Extension implements Comparable<Extension> {
-        String name;
-        int count;
-
-        public Extension(String name, int count) {
-            this.name = name;
-            this.count = count;
-        }
-
-        @Override
-        public int compareTo(Extension other) {
-            return this.name.compareTo(other.name);
-        }
     }
 }
