@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 class Solution {
     public static void main(String[] args) throws IOException {
@@ -14,14 +13,9 @@ class Solution {
 
         for (int t = 1; t <= 10; t++) {
             final int n = Integer.parseInt(br.readLine()); // 암호문 개수
-            List<String> numbers = Arrays.stream(br.readLine().split(" ")) // n개의 암호문
-                    .collect(Collectors.toList());
+            List<String> numbers = new LinkedList<>(Arrays.asList(br.readLine().split(" ")));
             final int m = Integer.parseInt(br.readLine()); // 명령어 개수
-            String[] list = br.readLine().split(" ");
-            Queue<String> orders = new LinkedList<>(); // 담긴 명령어
-            for (String order : list) {
-                orders.add(order);
-            }
+            Queue<String> orders = new LinkedList<>(Arrays.asList(br.readLine().split(" "))); // 담긴 명령어
 
             while (!orders.isEmpty()) { // m개의 명령어를 모두 수행
                 String order = orders.poll(); // I or D or A
@@ -45,9 +39,9 @@ class Solution {
                 }
             }
 
-            sb.append("#" + t + " ");
+            sb.append("#").append(t).append(" ");
             for (int i = 0; i < 10; i++) {
-                sb.append(numbers.get(i) + " ");
+                sb.append(numbers.get(i)).append(" ");
             }
             sb.append("\n");
         }
