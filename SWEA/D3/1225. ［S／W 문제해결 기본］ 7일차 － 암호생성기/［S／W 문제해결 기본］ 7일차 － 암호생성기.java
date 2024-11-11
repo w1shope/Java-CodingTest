@@ -24,13 +24,11 @@ class Solution {
                     dq.offer(0);
                     break;
                 }
-                dq.offer(poll - minus++);
-                if (minus > 5) {
-                    minus = 1;
-                }
+                dq.offer(poll - minus);
+                minus = (minus % 5) + 1;
             }
 
-            sb.append("#").append(t).append(" ");
+            sb.append("#" + t + " ");
             for (int num : dq) {
                 sb.append(num).append(" ");
             }
@@ -41,12 +39,10 @@ class Solution {
     }
 
     private static void initQue(BufferedReader br) throws IOException {
-        int[] inputs = Arrays.stream(br.readLine().split(" "))
-                .mapToInt(Integer::valueOf)
-                .toArray();
+        String[] inputs = br.readLine().split(" ");
         dq = new ArrayDeque<>();
-        for (int num : inputs) {
-            dq.offer(num);
+        for(int i = 0; i < inputs.length; i++) {
+            dq.offer(Integer.parseInt(inputs[i]));
         }
     }
 }
