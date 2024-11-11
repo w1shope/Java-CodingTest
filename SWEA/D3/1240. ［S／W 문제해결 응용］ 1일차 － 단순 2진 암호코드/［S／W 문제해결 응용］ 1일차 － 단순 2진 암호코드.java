@@ -2,18 +2,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
 
-    static String[] codes = {
-            "0001101", "0011001", "0010011", "0111101", "0100011",
-            "0110001", "0101111", "0111011", "0110111", "0001011"
-    };
-
+    static Map<String, Integer> map = new HashMap<>();
     static final int SIZE = 56;
     static int N, M; // 행, 열
     static char[][] arr;
     static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    static {
+        map.put("0001101", 0);
+        map.put("0011001", 1);
+        map.put("0010011", 2);
+        map.put("0111101", 3);
+        map.put("0100011", 4);
+        map.put("0110001", 5);
+        map.put("0101111", 6);
+        map.put("0111011", 7);
+        map.put("0110111", 8);
+        map.put("0001011", 9);
+    }
 
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(br.readLine());
@@ -33,13 +44,8 @@ class Solution {
         System.out.println(sb);
     }
 
-    static int getValue(String numberCode) {
-        for (int i = 0; i < 10; i++) {
-            if (numberCode.equals(codes[i])) {
-                return i;
-            }
-        }
-        return -1;
+    static int getValue(String code) {
+        return map.get(code);
     }
 
     static int answer() {
@@ -56,12 +62,13 @@ class Solution {
         int result = 0; // 최종 결과
         for (int i = 0; i < SIZE; i += 7) {
             String numberCode = code.substring(i, i + 7); // 56비트 코드를 앞에서부터 7비트씩 가져온다
+            int value = getValue(numberCode);
             if (i % 2 == 0) {
-                odd += getValue(numberCode);
+                odd += value;
             } else {
-                even += getValue(numberCode);
+                even += value;
             }
-            result += (getValue(numberCode));
+            result += value;
         }
 
         int sum = 3 * odd + even;
@@ -69,14 +76,24 @@ class Solution {
     }
 
     static boolean containsCode(char[] arr) {
-        return new String(arr).contains("1"); // '1' 비트가 포함되어 있는 경우
+        for (char c : arr) {
+            if (c == '1') { // '1' 비트가 포함되어 있는 경우
+                return true;
+            }
+        }
+        return false;
     }
 
     static String getCode(char[] arr) {
-        String strCode = new String(arr);
-        int lastCodeIdx = strCode.lastIndexOf('1');
+        int lastCodeIdx = -1;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (arr[i] == '1') {
+                lastCodeIdx = i;
+                break;
+            }
+        }
         int firstCodeIdx = lastCodeIdx - 55;
-        return strCode.substring(firstCodeIdx, lastCodeIdx + 1); // 56 비트를 반환
+        return new String(arr, firstCodeIdx, SIZE); // 56비트 추출
     }
 
     static void initArr() throws IOException {
