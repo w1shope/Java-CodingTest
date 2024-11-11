@@ -29,7 +29,7 @@ class Solution {
                     int x = Integer.parseInt(orders.poll()); // x번째 위치
                     int y = Integer.parseInt(orders.poll()); // 삭제할 개수
                     for (int i = 0; i < y; i++) {
-                        numbers.remove(x + 1);
+                        numbers.remove(x);
                     }
                 } else { // 추가
                     int y = Integer.parseInt(orders.poll()); // 추가할 개수
