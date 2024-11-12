@@ -1,76 +1,81 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 class Solution {
 
-    static final int SIZE = 100;
     static int[][] arr;
+    static final int SIZE = 100;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        for (int t = 1; t <= 10; t++) {
-            sb.append("#" + t + " ");
-            br.readLine();
 
+        for (int t = 1; t <= 10; t++) {
+            t = Integer.parseInt(br.readLine());
             arr = new int[SIZE][SIZE];
             for (int i = 0; i < SIZE; i++) {
-                arr[i] = Arrays.stream(br.readLine().split(" "))
-                        .mapToInt(Integer::valueOf)
-                        .toArray();
+                String[] inputs = br.readLine().split(" ");
+                for (int j = 0; j < SIZE; j++) {
+                    arr[i][j] = Integer.parseInt(inputs[j]);
+                }
             }
 
-            sb.append(answer() + "\n");
+            sb.append("#" + t + " " + answer()).append("\n");
         }
 
         System.out.println(sb);
     }
 
     static int answer() {
-        return Math.max(Math.max(getRowSumMax(), getColSumMax()),
-                Math.max(getRightDiagonalMax(), getLeftDiagonalMax()));
-    }
+        int max = 0;
 
-    static int getRowSumMax() {
-        int result = Integer.MIN_VALUE;
+        // 가로
         for (int y = 0; y < SIZE; y++) {
-            int tmp = 0;
-            for (int x = 0; x < SIZE; x++) {
-                tmp += arr[y][x];
-            }
-            result = Math.max(result, tmp);
+            max = Math.max(max, getRowSum(arr[y]));
         }
-        return result;
-    }
 
-    static int getColSumMax() {
-        int result = Integer.MIN_VALUE;
+        // 세로
         for (int x = 0; x < SIZE; x++) {
-            int tmp = 0;
-            for (int y = 0; y < SIZE; y++) {
-                tmp += arr[y][x];
-            }
-            result = Math.max(result, tmp);
+            max = Math.max(max, getColSum(x, 0));
         }
-        return result;
+
+        // 대각선
+        max = Math.max(max, Math.max(getLeftDiagonalSum(), getRightDiagonalSum()));
+
+        return max;
     }
 
-    static int getRightDiagonalMax() {
-        int result = 0;
-        for (int y = 0; y < SIZE; y++) {
-            result += arr[y][y];
+    static int getRowSum(int[] rowArr) {
+        int sum = 0;
+        for (int i = 0; i < SIZE; i++) {
+            sum += rowArr[i];
         }
-        return result;
+        return sum;
     }
 
-    static int getLeftDiagonalMax() {
-        int result = 0;
-        for (int y = SIZE - 1; y >= 0; y--) {
-            result += arr[y][y];
+    static int getColSum(int x, int y) {
+        int sum = 0;
+        while (y < SIZE) {
+            sum += arr[y][x];
+            y++;
         }
-        return result;
+        return sum;
     }
 
+    static int getRightDiagonalSum() {
+        int sum = 0;
+        for (int i = 0; i < SIZE; i++) {
+            sum += arr[i][i];
+        }
+        return sum;
+    }
+
+    static int getLeftDiagonalSum() {
+        int sum = 0;
+        for (int i = SIZE - 1; i >= 0; i--) {
+            sum += arr[i][i];
+        }
+        return sum;
+    }
 }
