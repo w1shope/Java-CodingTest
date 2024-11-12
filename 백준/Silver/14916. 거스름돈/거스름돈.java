@@ -1,38 +1,41 @@
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println(bfs(sc.nextInt()));
+        int n = sc.nextInt();
+
+        System.out.println(bfs(n));
     }
 
     static int bfs(int money) {
         Queue<int[]> que = new LinkedList<>();
-        que.offer(new int[]{money, 0}); // {남은 잔액, 동전 개수}
+        que.offer(new int[]{money, 0}); // {남은 돈, 동전 개수}
         boolean[] visited = new boolean[money + 1];
+        visited[money] = true;
+
         while (!que.isEmpty()) {
             int[] poll = que.poll();
-            int remainMoney = poll[0];
-            int exchangeCoin = poll[1];
-            if (remainMoney == 0) {
-                return exchangeCoin;
+            if (poll[0] == 0) { // 남은 돈이 0원이라면
+                return poll[1]; // 동전 개수 반환
             }
 
-            // 5원으로 거슬러 준다
-            if (remainMoney - 5 >= 0 && !visited[remainMoney - 5]) {
-                que.offer(new int[]{remainMoney - 5, exchangeCoin + 1});
-                visited[remainMoney - 5] = true;
+            // 5원 이상 남았다면
+            if (poll[0] - 5 >= 0 && !visited[poll[0] - 5]) {
+                que.offer(new int[]{poll[0] - 5, poll[1] + 1});
+                visited[poll[0] - 5] = true;
             }
-            // 2원으로 거슬러 준다
-            if (remainMoney - 2 >= 0 && !visited[remainMoney - 2]) {
-                que.offer(new int[]{remainMoney - 2, exchangeCoin + 1});
-                visited[remainMoney - 2] = true;
+
+            // 2원 이상 남았다면
+            if (poll[0] - 2 >= 0 && !visited[poll[0] - 2]) {
+                que.offer(new int[]{poll[0] - 2, poll[1] + 1});
+                visited[poll[0] - 2] = true;
             }
+
         }
-
         return -1;
     }
 }
