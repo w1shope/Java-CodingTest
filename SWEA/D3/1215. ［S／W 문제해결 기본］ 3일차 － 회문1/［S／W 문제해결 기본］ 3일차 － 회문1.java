@@ -4,77 +4,73 @@ import java.io.InputStreamReader;
 
 class Solution {
 
-    static int N;
+    static int palindromeLength;
     static char[][] arr;
     static final int SIZE = 8;
-    static int answer;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        for (int t = 1; t <= 10; t++) {
-            sb.append("#" + t + " ");
 
-            N = Integer.parseInt(br.readLine()); // 회문의 길이
+        for (int t = 1; t <= 10; t++) {
+            palindromeLength = Integer.parseInt(br.readLine()); // 팰린드롬 길이
             arr = new char[SIZE][SIZE];
             for (int i = 0; i < SIZE; i++) {
-                char[] inputArr = br.readLine().toCharArray();
+                char[] inputs = br.readLine().toCharArray();
                 for (int j = 0; j < SIZE; j++) {
-                    arr[i][j] = inputArr[j];
+                    arr[i][j] = inputs[j];
                 }
             }
 
-            answer = 0;
-
-            // 회문의 길이인, SIZE - N까지만 탐색하면 된다.
-            rowsPalindromeCount();
-            colsPalindromeCount();
-
-            sb.append(answer + "\n");
+            sb.append("#" + t + " " + answer()).append("\n");
         }
 
-        System.out.println(sb + "\n");
-    }
+        System.out.println(sb);
+    } // main
 
-    // 열에 존재하는 팰린드롬 갯수 반환
-    static void colsPalindromeCount() {
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y <= SIZE - N; y++) {
-                StringBuilder word = new StringBuilder();
-                for (int i = 0; i < N; i++) {
-                    word.append(arr[y + i][x]);
-                }
-                if (isPalindrome(word)) {
-                    answer++;
-                }
-            }
-        }
-    }
+    static int answer() {
+        int result = 0;
 
-    // 행에 존재하는 팰린드롬 갯수 반환
-    static void rowsPalindromeCount() {
+        // 가로
         for (int y = 0; y < SIZE; y++) {
-            for (int x = 0; x <= SIZE - N; x++) {
-                StringBuilder word = new StringBuilder();
-                for (int i = 0; i < N; i++) {
-                    word.append(arr[y][x + i]);
-                }
-                if (isPalindrome(word)) {
-                    answer++;
+            for (int x = 0; x <= SIZE - palindromeLength; x++) {
+                if (isRowPalindrome(arr[y], x, x + palindromeLength - 1)) {
+                    result++;
                 }
             }
         }
+
+        // 세로
+        for (int x = 0; x < SIZE; x++) {
+            for (int y = 0; y <= SIZE - palindromeLength; y++) {
+                if (isColPalindrome(x, y, y + palindromeLength - 1)) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
     }
 
-    static boolean isPalindrome(StringBuilder word) {
-        for (int i = 0; i < N / 2; i++) {
-            char start = word.charAt(i);
-            char end = word.charAt((N - 1) - i);
-            if (start != end) {
+    static boolean isColPalindrome(int col, int start, int end) {
+        while (start < end) {
+            if (arr[start][col] != arr[end][col]) {
                 return false;
             }
+            start++;
+            end--;
         }
         return true;
     }
 
+    static boolean isRowPalindrome(char[] rowArr, int start, int end) {
+        while (start < end) {
+            if (rowArr[start] != rowArr[end]) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
 }
