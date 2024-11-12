@@ -4,75 +4,86 @@ import java.io.InputStreamReader;
 
 class Solution {
 
-    static char[][] arr;
-    static final int SIZE = 100;
-    static int answer;
+    static char[][] cArr;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
 
         for (int t = 1; t <= 10; t++) {
-            String tc = br.readLine();
-            sb.append("#" + tc + " ");
-
-            arr = new char[SIZE][SIZE];
-            for (int i = 0; i < SIZE; i++) {
-                char[] c = br.readLine().toCharArray();
-                for (int j = 0; j < SIZE; j++) {
-                    arr[i][j] = c[j];
+            t = Integer.parseInt(br.readLine());
+            cArr = new char[100][100];
+            for (int i = 0; i < cArr.length; i++) {
+                char[] inputs = br.readLine().toCharArray();
+                for (int j = 0; j < cArr[i].length; j++) {
+                    cArr[i][j] = inputs[j];
                 }
             }
 
-            answer = Integer.MIN_VALUE;
-            // 행 직선
-            for (int y = 0; y < SIZE; y++) {
-                rowPalindromeCheck(arr[y]);
-            }
-            // 열 직선
-            for (int x = 0; x < SIZE; x++) {
-                colPalindromeCheck(arr, x);
-            }
-
-            sb.append(answer + "\n");
+            sb.append("#" + t + " " + answer() + "\n");
         }
 
         System.out.println(sb);
-
     }
 
-    static void rowPalindromeCheck(char[] arr) {
-        for (int i = 0; i < SIZE; i++) {
-            StringBuilder word = new StringBuilder();
-            for (int j = i; j < SIZE; j++) {
-                word.append(arr[j]);
-                if (isPalindrome(word.toString())) {
-                    answer = Math.max(answer, word.length());
-                }
+    static int answer() {
+        int maxLength = 0;
+
+        // 가로
+        for (int y = 0; y < cArr.length; y++) {
+            for (int x = 0; x < cArr[y].length; x++) {
+                int palindromeCount = getRowPalindromeCount(cArr[y], x);
+                maxLength = Math.max(maxLength, palindromeCount);
             }
         }
+
+        // 세로
+        for (int x = 0; x < cArr[0].length; x++) {
+            for (int y = 0; y < cArr.length; y++) {
+                int colPalindromeCount = getColPalindromeCount(cArr, x, y);
+                maxLength = Math.max(maxLength, colPalindromeCount);
+            }
+        }
+
+        return maxLength;
     }
 
-    static void colPalindromeCheck(char[][] arr, int x) {
-        for (int y = 0; y < SIZE; y++) {
-            StringBuilder word = new StringBuilder();
-            for (int i = y; i < SIZE; i++) {
-                word.append(arr[i][x]);
-                if (isPalindrome(word.toString())) {
-                    answer = Math.max(answer, word.length());
-                }
+    static int getColPalindromeCount(char[][] arr, int x, int y) {
+        int result = 0;
+        StringBuilder words = new StringBuilder();
+        int count = 0;
+        for (int i = y; i < arr.length; i++) {
+            words.append(arr[i][x]);
+            count++;
+            if (isPalindrome(words.toString())) {
+                result = count;
             }
         }
+        return result;
+    }
+
+    static int getRowPalindromeCount(char[] arr, int x) {
+        int result = 0;
+        StringBuilder words = new StringBuilder();
+        int count = 0;
+        for (int i = x; i < arr.length; i++) {
+            words.append(arr[i]);
+            count++;
+            if (isPalindrome(words.toString())) {
+                result = count;
+            }
+        }
+        return result;
     }
 
     static boolean isPalindrome(String str) {
-        for (int i = 0; i < str.length() / 2; i++) {
-            char start = str.charAt(i);
-            char end = str.charAt(str.length() - 1 - i);
-            if (start != end) {
+        char[] arr = str.toCharArray();
+        for (int i = 0; i < arr.length / 2; i++) {
+            if (arr[i] != arr[arr.length - 1 - i]) {
                 return false;
             }
         }
         return true;
     }
+
 }
