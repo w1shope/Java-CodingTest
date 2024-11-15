@@ -5,29 +5,25 @@ import java.io.InputStreamReader;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        while (n-- > 0) {
+        StringBuilder sb = new StringBuilder();
+
+        int T = Integer.parseInt(br.readLine());
+        while (T-- > 0) {
             String[] splits = br.readLine().split(" ");
-            int a = Integer.parseInt(splits[0]);
-            int b = Integer.parseInt(splits[1]);
+            long a = Long.parseLong(splits[0]);
+            long b = Long.parseLong(splits[1]);
 
-            long result = 1;
-            while (true) {
-                int gcd = gcd(a, b);
-                if (gcd == 1) {
-                    result *= (long) a * b;
-                    break;
-                }
-                result *= gcd;
-                a /= gcd;
-                b /= gcd;
-            }
+            long gcd = gcd(a, b);
+            a /= gcd;
+            b /= gcd;
 
-            System.out.println(result);
+            sb.append((a * b) * gcd).append("\n");
         }
+
+        System.out.println(sb);
     }
 
-    static int gcd(int a, int b) { // 최소 공배수가 1 -> 두 수는 서로소
+    static long gcd(long a, long b) {
         if (b == 0) {
             return a;
         }
