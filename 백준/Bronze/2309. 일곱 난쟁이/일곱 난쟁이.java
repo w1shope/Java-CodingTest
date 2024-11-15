@@ -7,43 +7,56 @@ import java.util.List;
 
 public class Main {
 
-    static int[] arr;
+    static final int MAX_PICK = 7;
+    static final int FIND_SUM = 100;
+    static final int MONSTER_COUNT = 9;
+    static int[] heights;
     static List<Integer> answer = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        arr = new int[9];
-        for (int i = 0; i < 9; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+
+        // 키 설정
+        heights = new int[MONSTER_COUNT];
+        for (int i = 0; i < MONSTER_COUNT; i++) {
+            heights[i] = Integer.parseInt(br.readLine());
+        }
+        Arrays.sort(heights);
+
+        for (int i = 0; i < MONSTER_COUNT; i++) {
+            if (!answer.isEmpty()) { // 정답을 찾은 경우
+                break;
+            }
+            dfs(0, new ArrayList<>(), i);
         }
 
-        Arrays.sort(arr);
-
-        dfs(0, new ArrayList<>(), 0);
-
-        for (int i = 0; i < 7; i++) {
-            System.out.println(answer.get(i));
+        StringBuilder sb = new StringBuilder();
+        for (int idx : answer) {
+            sb.append(heights[idx]).append("\n");
         }
+
+        System.out.println(sb);
     }
 
-    static void dfs(int monsterIdx, List<Integer> selected, int sum) {
-        if (selected.size() == 7) {
-            if (sum == 100) {
-                answer = new ArrayList<>(selected);
+    static void dfs(int sum, List<Integer> picks, int pickIdx) {
+        if (picks.size() == MAX_PICK) { // 7명 선택했을 때
+            if (sum == FIND_SUM) { // 7명 키 합이 100이라면 종료
+                answer = new ArrayList<>(picks);
             }
             return;
         }
 
-        if (monsterIdx >= 9 || !answer.isEmpty()) {
+        // 몬스터 선택 범위 넘기거나 or 정답을 찾은 경우
+        if (pickIdx >= MONSTER_COUNT || !answer.isEmpty()) {
             return;
         }
 
         // 현재 몬스터를 선택하거나
-        selected.add(arr[monsterIdx]);
-        dfs(monsterIdx + 1, selected, sum + arr[monsterIdx]);
+        picks.add(pickIdx);
+        dfs(sum + heights[pickIdx], picks, pickIdx + 1);
 
-        // 안 하거나
-        selected.remove(selected.size() - 1);
-        dfs(monsterIdx + 1, selected, sum);
+        // 선택하지 않거나
+        picks.remove(picks.size() - 1);
+        dfs(sum, picks, pickIdx + 1);
     }
 }
