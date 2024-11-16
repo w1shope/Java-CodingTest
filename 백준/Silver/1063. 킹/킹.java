@@ -6,30 +6,11 @@ import java.util.Map;
 
 public class Main {
 
-    static Map<Character, Integer> idxMap = new HashMap<>();
-    static Map<Integer, Character> alphabetMap = new HashMap<>();
     static Map<String, int[]> moveMap = new HashMap<>();
     static int[] king;
     static int[] rock;
 
     static {
-        idxMap.put('A', 0);
-        idxMap.put('B', 1);
-        idxMap.put('C', 2);
-        idxMap.put('D', 3);
-        idxMap.put('E', 4);
-        idxMap.put('F', 5);
-        idxMap.put('G', 6);
-        idxMap.put('H', 7);
-        alphabetMap.put(0, 'A');
-        alphabetMap.put(1, 'B');
-        alphabetMap.put(2, 'C');
-        alphabetMap.put(3, 'D');
-        alphabetMap.put(4, 'E');
-        alphabetMap.put(5, 'F');
-        alphabetMap.put(6, 'G');
-        alphabetMap.put(7, 'H');
-
         moveMap.put("R", new int[]{1, 0});
         moveMap.put("L", new int[]{-1, 0});
         moveMap.put("B", new int[]{0, 1});
@@ -54,8 +35,8 @@ public class Main {
             move(input);
         }
 
-        System.out.println(alphabetMap.get(king[0]) + "" + (8 - king[1]));
-        System.out.println(alphabetMap.get(rock[0]) + "" + (8 - rock[1]));
+        System.out.println((char) (king[0] + 'A') + "" + (8 - king[1]));
+        System.out.println((char) (rock[0] + 'A') + "" + (8 - rock[1]));
     }
 
     static void move(String dir) {
@@ -77,6 +58,7 @@ public class Main {
 
             rock[0] = nextRockX;
             rock[1] = nextRockY;
+            rock[1] = nextRockY;
         }
 
         king[0] = nextKingX;
@@ -89,8 +71,8 @@ public class Main {
 
 
     static int[] getIdx(String input) {
-        char first = input.charAt(0);
-        int last = input.charAt(1) - '0';
-        return new int[]{idxMap.get(first), 8 - last}; //{x, y}
+        int col = input.charAt(0) - 'A';
+        int row = 8 - (input.charAt(1) - '0');
+        return new int[]{col, row}; //{x, y}
     }
 }
