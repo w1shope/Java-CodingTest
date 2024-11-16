@@ -1,41 +1,35 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
+
+    static Queue<int[]> que = new LinkedList<>();
+    static int[][] answer;
+    static int n, m;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] inputs = br.readLine().split(" ");
-        int n = Integer.parseInt(inputs[0]); // 행
-        int m = Integer.parseInt(inputs[1]); // 열
-        char[][] arr = new char[n][m];
-        int[][] answer = new int[n][m];
+        n = Integer.parseInt(inputs[0]); // 행
+        m = Integer.parseInt(inputs[1]); // 열
+
+        answer = new int[n][m]; // 구름이 뜨는 시간
         for (int i = 0; i < n; i++) {
             char[] tmp = br.readLine().toCharArray();
             for (int j = 0; j < m; j++) {
-                arr[i][j] = tmp[j];
-                if (tmp[j] == 'c') {
+                if (tmp[j] == 'c') { // 하늘에 구름이 있다면
                     answer[i][j] = 0;
-                } else {
+                    que.offer(new int[]{i, j}); // {y, x}
+                } else { // 구름이 없다면
                     answer[i][j] = -1;
                 }
             }
         }
 
-        for (int y = 0; y < n; y++) {
-            int times = 1;
-            while (!isBreak(arr[y])) {
-                for (int j = m - 1; j >= 1; j--) {
-                    arr[y][j] = arr[y][j - 1];
-                    if (arr[y][j - 1] == 'c' && answer[y][j] == -1) {
-                        answer[y][j] = times;
-                    }
-                }
-                arr[y][0] = '.';
-                times++;
-            }
-        }
+        bfs();
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
@@ -48,12 +42,17 @@ public class Main {
         System.out.println(sb);
     }
 
-    static boolean isBreak(char[] rowArr) {
-        for (int i = 0; i < rowArr.length; i++) {
-            if (rowArr[i] == 'c') {
-                return false;
+    static void bfs() {
+        while (!que.isEmpty()) {
+            int[] pos = que.poll();
+            int y = pos[0];
+            int x = pos[1];
+
+            // 우측에 위치에 구름이 없다면
+            if (x + 1 < m && answer[y][x + 1] == -1) {
+                answer[y][x + 1] = answer[y][x] + 1;
+                que.offer(new int[]{y, x + 1});
             }
         }
-        return true;
     }
 }
