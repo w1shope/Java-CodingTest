@@ -6,45 +6,40 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Main {
-
-    static int N;
-    static Map<Character, Double> map = new HashMap<>();
-    static Stack<Double> stack = new Stack<>();
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
 
         char[] cArr = br.readLine().toCharArray();
-        for (int i = 0; i < N; i++) {
-            map.put((char) ('A' + i), Double.parseDouble(br.readLine()));
+
+        // 알파벳에 대응되는 숫자 저장
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            map.put((char) ('A' + i), Integer.parseInt(br.readLine()));
         }
 
+        // 후위 연산 진행
+        Stack<Double> stack = new Stack<>();
         for (char c : cArr) {
-            if (map.containsKey(c)) { // 숫자라면
-                stack.push(map.get(c));
-            } else {
+            if (c >= 'A' && c <= 'Z') { // 피연산자라면
+                stack.push((double) map.get(c));
+            } else { // 연산자라면
                 double num1 = stack.pop();
                 double num2 = stack.pop();
-                stack.push(getCalculateResult(num2, num1, c));
+                if (c == '+') {
+                    stack.push(num2 + num1);
+                } else if (c == '-') {
+                    stack.push(num2 - num1);
+                } else if (c == '/') {
+                    stack.push(num2 / num1);
+                } else if (c == '*') {
+                    stack.push(num2 * num1);
+                }
             }
         }
 
+        // 마지막 원소가 계산 결과임
         System.out.println(String.format("%.2f", stack.pop()));
-
     }
 
-    static double getCalculateResult(double num1, double num2, char operator) {
-        switch (operator) {
-            case '/':
-                return num1 / num2;
-            case '*':
-                return num1 * num2;
-            case '-':
-                return num1 - num2;
-            case '+':
-                return num1 + num2;
-        }
-        return -1;
-    }
 }
