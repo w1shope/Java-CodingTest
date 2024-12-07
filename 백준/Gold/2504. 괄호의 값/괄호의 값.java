@@ -4,51 +4,55 @@ import java.io.InputStreamReader;
 import java.util.Stack;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        char[] arr = br.readLine().toCharArray();
 
-        Stack<Character> stack = new Stack<>();
-        int temp = 1;
+        Stack<Character> st = new Stack<>();
+        boolean flag = false;
         int answer = 0;
+        int cnt = 1;
 
-        for (int i = 0; i < arr.length; i++) {
-            char c = arr[i];
-
-            if (c == '(') {
-                stack.push(c);
-                temp *= 2;
-            } else if (c == '[') {
-                stack.push(c);
-                temp *= 3;
-            } else if (c == ')') {
-                if (stack.isEmpty() || stack.peek() != '(') {
-                    answer = 0;
+        String str = br.readLine();
+        for (int i = 0; i < str.length(); i++) {
+            char cur = str.charAt(i);
+            if (cur == '(') {
+                st.push(cur);
+                cnt *= 2;
+            } else if (cur == '[') {
+                st.push(cur);
+                cnt *= 3;
+            } else {
+                if (st.isEmpty()) {
+                    flag = true;
                     break;
                 }
-                if (arr[i - 1] == '(') {
-                    answer += temp;
+
+                if (cur == ')') {
+                    if (st.peek() != '(') {
+                        break;
+                    }
+                    if (str.charAt(i - 1) == '(') {
+                        answer += cnt;
+                    }
+                    cnt /= 2;
+                    st.pop();
+                } else if (cur == ']') {
+                    if (st.peek() != '[') {
+                        break;
+                    }
+                    if (str.charAt(i - 1) == '[') {
+                        answer += cnt;
+                    }
+                    cnt /= 3;
+                    st.pop();
                 }
-                stack.pop();
-                temp /= 2;
-            } else if (c == ']') {
-                if (stack.isEmpty() || stack.peek() != '[') {
-                    answer = 0;
-                    break;
-                }
-                if (arr[i - 1] == '[') {
-                    answer += temp;
-                }
-                stack.pop();
-                temp /= 3;
             }
         }
 
-        if (!stack.isEmpty()) {
-            answer = 0;
+        if (flag || !st.isEmpty()) {
+            System.out.println(0);
+        } else {
+            System.out.println(answer);
         }
-
-        System.out.println(answer);
     }
 }
