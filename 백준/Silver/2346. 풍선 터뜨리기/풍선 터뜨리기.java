@@ -9,40 +9,35 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
 
-        // 풍선 정보 저장
-        Deque<int[]> que = new ArrayDeque<>();
+        Deque<int[]> dq = new ArrayDeque<>();
         String[] inputs = br.readLine().split(" ");
-        for (int i = 0; i < n; i++) {
-            // {풍선 번호, 회전 횟수}
-            que.offer(new int[]{i + 1, Integer.parseInt(inputs[i])});
+        for (int i = 1; i <= n; i++) {
+            dq.offer(new int[]{i, Integer.parseInt(inputs[i - 1])});
         }
 
-        // 모든 풍선을 터뜨린다.
-        int[] arr = new int[n]; // 순차적으로 터뜨릴 풍선 번호
+        int[] answer = new int[n];
         for (int i = 0; i < n; i++) {
-            int[] poll = que.poll(); // 현재 풍선은 터뜨린 것으로 간주하므로, 큐에서 제거
-            int rotate = poll[1]; // 회전 횟수
-            arr[i] = poll[0]; // 터뜨릴 풍선 번호 저장
-            if (que.isEmpty()) {
+            int[] poll = dq.poll(); // {풍선 번호, 회전 횟수}
+            answer[i] = poll[0];
+
+            if (dq.isEmpty()) {
                 break;
             }
 
-            // 터진 풍선으로부터 rotate 횟수만큼 오른쪽으로 이동하려면, (rotate - 1)번 회전해야함.
-            // 터진 풍선으로부터 rotate 횟수만큼 왼쪽으로 이동하려면, rotate번 회전해야함.
-            if (rotate > 0) { // 터진 풍선으로부터 오른쪽으로 이동
+            int rotate = poll[1];
+            if (rotate > 0) { // 오른쪽으로 이동
                 for (int j = 0; j < rotate - 1; j++) {
-                    que.offerLast(que.pollFirst());
+                    dq.offer(dq.poll());
                 }
-            } else { // 터진 풍선으로부터 왼쪽으로 이동
+            } else { // 왼쪽으로 이동
                 for (int j = 0; j < -rotate; j++) {
-                    que.offerFirst(que.pollLast());
+                    dq.offerFirst(dq.pollLast());
                 }
             }
         }
 
-        // 순차적으로 터뜨릴 풍선 번호 출력
         StringBuilder sb = new StringBuilder();
-        for (int idx : arr) {
+        for (int idx : answer) {
             sb.append(idx + " ");
         }
         System.out.println(sb);
