@@ -1,24 +1,32 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
 
 public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        long s = Long.parseLong(br.readLine());
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        long s = sc.nextLong();
+        Stack<Long> picked = new Stack<>();
+        long currentSum = 0L;
+        long pickedCnt = 0;
 
-        int count = 1;
-        long cal = 1;
-        while (true) {
-            if (cal == s) {
-                System.out.println(count);
+        for (long num = 1; num <= s; num++) {
+            picked.push(num);
+            currentSum += num;
+            pickedCnt++;
+
+            if (currentSum == s) {
                 break;
-            } else if (cal > s) {
-                System.out.println(count - 1);
-                break;
+            } else if (currentSum > s) {
+                currentSum -= picked.pop();
+                currentSum -= picked.pop();
+                pickedCnt -= 2;
+                num -= 1;
             }
-            cal += ++count;
         }
 
+        System.out.println(pickedCnt);
     }
-
 }
