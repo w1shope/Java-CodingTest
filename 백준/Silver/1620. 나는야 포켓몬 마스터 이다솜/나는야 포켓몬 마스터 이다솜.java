@@ -14,24 +14,18 @@ public class Main {
         int m = Integer.parseInt(inputs[1]);
 
         // 도감 정보 저장
-        Map<String, String> alphabets = new HashMap<>(); // {포켓몬 이름, 포켓몬 번호}
-        Map<String, String> numbers = new HashMap<>(); // {포켓몬 번호, 포켓몬 이름}
+        Map<String, String> map = new HashMap<>(); // {포켓몬 이름, 포켓몬 번호}
         for (int i = 1; i <= n; i++) {
             String name = br.readLine();
-            alphabets.put(name, i + "");
-            numbers.put(i + "", name);
+            map.put(name, i + "");
+            map.put(i + "", name);
         }
 
         // m개의 입력을 받아 출력
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < m; i++) {
             String input = br.readLine();
-            // 포켓몬 이름을 입력했다면 포켓몬의 번호를 출력하고,
-            if (Character.isAlphabetic(input.charAt(0))) {
-                sb.append(alphabets.get(input)).append("\n");
-            } else { // 포켓몬의 번호를 입력했다면 포켓몬의 이름을 출력한다.
-                sb.append(numbers.get(input)).append("\n");
-            }
+            sb.append(map.get(input)).append("\n");
         }
         System.out.println(sb);
     }
