@@ -4,15 +4,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         Map<String, Integer> map = new HashMap<>(); // {이름, 입력 횟수}
-        List<String> names = new ArrayList<>(); // 이름들
+        Set<String> set = new HashSet<>(); // 이름들
 
         // 입력이 종료될 때까지 입력
         int mod = 0; // 입력된 생물 개수
@@ -26,15 +28,12 @@ public class Main {
 
             // 입력 정보 저장
             mod++;
-            if (map.containsKey(input)) {
-                map.put(input, map.get(input) + 1);
-            } else {
-                names.add(input);
-                map.put(input, 1);
-            }
+            map.put(input, map.getOrDefault(input, 0) + 1);
+            set.add(input);
         }
 
         // 이름을 사전 순으로 정렬
+        List<String> names = new ArrayList<>(set);
         Collections.sort(names);
 
         // 사전 순으로, 이름과 차지하는 비율 출력
