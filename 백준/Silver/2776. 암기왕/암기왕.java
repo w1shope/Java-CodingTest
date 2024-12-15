@@ -1,27 +1,28 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
+
+        StringBuilder sb = new StringBuilder();
         while (T-- > 0) {
-            int N = Integer.parseInt(br.readLine());
-            Map<String, Integer> map = new HashMap();
+            Set<String> book1 = new HashSet<>();
+            int n = Integer.parseInt(br.readLine());
             for (String input : br.readLine().split(" ")) {
-                map.put(input, 1);
+                book1.add(input);
             }
 
-            StringBuilder sb = new StringBuilder();
-            int M = Integer.parseInt(br.readLine());
+            int m = Integer.parseInt(br.readLine());
             for (String input : br.readLine().split(" ")) {
-                sb.append(map.containsKey(input) ? "1" : "0").append("\n");
+                sb.append(book1.contains(input) ? 1 : 0).append("\n");
             }
-
-            System.out.print(sb);
         }
+
+        System.out.println(sb);
     }
 }
