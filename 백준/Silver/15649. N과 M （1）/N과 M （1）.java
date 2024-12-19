@@ -1,45 +1,68 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
     static int N, M;
     static boolean[] visited;
-    static int[] printArr;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] inputs = br.readLine().split(" ");
 
-        String[] inputArr = br.readLine().split(" ");
-        N = Integer.parseInt(inputArr[0]);
-        M = Integer.parseInt(inputArr[1]);
+        // N, M 초기값 설정
+        N = Integer.parseInt(inputs[0]);
+        M = Integer.parseInt(inputs[1]);
 
-        visited = new boolean[N + 1]; // 1 ~ N 숫자 방문 여부
-        printArr = new int[M]; // 출력할 숫자
+        // 방문 여부 배열 초기화
+        visited = new boolean[N + 1];
 
-        recur(0);
+        List<Integer> selected = new ArrayList<>();
+        for (int s = 1; s <= N; s++) {
+            // 방문 처리
+            visited[s] = true;
+            selected.add(s);
+            dfs(selected);
 
-        System.out.println(sb.toString());
+            // 방문 취소
+            visited[s] = false;
+            selected.remove(selected.size() - 1);
+        }
+
+        System.out.println(sb);
     }
 
-    static void recur(int depth) {
-        if (depth == M) {
-            for (int i = 0; i < printArr.length; i++) {
-                sb.append(printArr[i] + " ");
-            }
-            sb.append("\n");
+    static void print(List<Integer> list) {
+        for (int num : list) {
+            sb.append(num).append(" ");
+        }
+        sb.append("\n");
+    }
+
+    static void dfs(List<Integer> selected) {
+        // M개를 선택한 경우 출력
+        if (selected.size() == M) {
+            print(selected);
             return;
         }
 
-        for (int i = 1; i <= N; i++) {
-            if (!visited[i]) { // 현재 숫자가 출력되지 않은 경우에만 진행
-                visited[i] = true; // 현재 숫자 방문 처리
-                printArr[depth] = i;
-                recur(depth + 1);
-                visited[i] = false;
+        for (int num = 1; num <= N; num++) {
+            if (visited[num]) {
+                continue;
             }
+
+            // 방문처리
+            visited[num] = true;
+            selected.add(num);
+            dfs(selected);
+
+            // 방문 취소
+            visited[num] = false;
+            selected.remove(selected.size() - 1);
         }
     }
 }
