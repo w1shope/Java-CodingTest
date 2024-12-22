@@ -7,39 +7,43 @@ import java.util.Deque;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
+        int[] move = new int[n + 1]; // 풍선 번호 별로 적혀있는 숫자
 
-        Deque<int[]> dq = new ArrayDeque<>();
+        Deque<Integer> que = new ArrayDeque<>();
         String[] inputs = br.readLine().split(" ");
-        for (int i = 1; i <= n; i++) {
-            dq.offer(new int[]{i, Integer.parseInt(inputs[i - 1])});
-        }
-
-        int[] answer = new int[n];
         for (int i = 0; i < n; i++) {
-            int[] poll = dq.poll(); // {풍선 번호, 회전 횟수}
-            answer[i] = poll[0];
-
-            if (dq.isEmpty()) {
-                break;
-            }
-
-            int rotate = poll[1];
-            if (rotate > 0) { // 오른쪽으로 이동
-                for (int j = 0; j < rotate - 1; j++) {
-                    dq.offer(dq.poll());
-                }
-            } else { // 왼쪽으로 이동
-                for (int j = 0; j < -rotate; j++) {
-                    dq.offerFirst(dq.pollLast());
-                }
-            }
+            int val = Integer.parseInt(inputs[i]);
+            move[i + 1] = val;
+            que.offer(i + 1);
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int idx : answer) {
-            sb.append(idx + " ");
+        while (que.size() > 1) {
+            int idx = que.poll();
+            sb.append(idx).append(" ");
+
+            if (move[idx] > 0) {
+                iterator(que, true, move[idx] - 1);
+            } else {
+                iterator(que, false, Math.abs(move[idx]));
+            }
         }
+
+        sb.append(que.poll());
         System.out.println(sb);
+    }
+
+    static void iterator(Deque<Integer> que, boolean isLeftIterator, int iteratorCount) {
+        if (isLeftIterator) {
+            for (int i = 0; i < iteratorCount; i++) {
+                que.offer(que.poll());
+            }
+        } else {
+            for (int i = 0; i < iteratorCount; i++) {
+                que.offerFirst(que.pollLast());
+            }
+        }
     }
 }
