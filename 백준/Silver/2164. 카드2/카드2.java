@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -14,13 +16,13 @@ public class Main {
             return;
         }
 
-        Deque<Integer> que = new ArrayDeque<>();
+        Queue<Integer> que = new LinkedList<>();
         for (int i = 1; i <= n; i++) {
             que.offer(i);
         }
 
         while (!que.isEmpty()) {
-            que.pollFirst();
+            que.poll();
             if (que.size() == 1) {
                 break;
             }
