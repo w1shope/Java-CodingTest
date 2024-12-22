@@ -7,37 +7,43 @@ import java.util.Deque;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int n = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         Deque<String> dq = new ArrayDeque<>();
-        StringBuilder sb = new StringBuilder();
         while (n-- > 0) {
-            String[] inputs = br.readLine().split(" ");
-            String order = inputs[0];
-            if (inputs.length == 2) { // push_front, push_back
-                if (order.equals("push_front")) {
-                    dq.offerFirst(inputs[1]);
-                } else {
-                    dq.offerLast(inputs[1]);
-                }
-            } else {
-                if (order.equals("pop_front")) {
-                    sb.append(dq.isEmpty() ? -1 : dq.pollFirst()).append("\n");
-                } else if (order.equals("pop_back")) {
+            String input = br.readLine();
+
+            if (input.startsWith("push_front")) {
+                dq.offerFirst(input.split(" ")[1]);
+                continue;
+            } else if (input.startsWith("push_back")) {
+                dq.offer(input.split(" ")[1]);
+                continue;
+            }
+
+            switch (input) {
+                case "pop_front":
+                    sb.append(dq.isEmpty() ? -1 : dq.poll()).append("\n");
+                    break;
+                case "pop_back":
                     sb.append(dq.isEmpty() ? -1 : dq.pollLast()).append("\n");
-                } else if (order.equals("size")) {
-                    sb.append(dq.size() + "\n");
-                } else if (order.equals("empty")) {
+                    break;
+                case "size":
+                    sb.append(dq.size()).append("\n");
+                    break;
+                case "empty":
                     sb.append(dq.isEmpty() ? 1 : 0).append("\n");
-                } else if (order.equals("front")) {
-                    sb.append(dq.isEmpty() ? -1 : dq.peekFirst()).append("\n");
-                } else {
+                    break;
+                case "front":
+                    sb.append(dq.isEmpty() ? -1 : dq.peek()).append("\n");
+                    break;
+                default:
                     sb.append(dq.isEmpty() ? -1 : dq.peekLast()).append("\n");
-                }
             }
         }
 
-        System.out.println(sb);
+        System.out.print(sb);
     }
-
 }
