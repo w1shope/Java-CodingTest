@@ -1,64 +1,61 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+
         StringBuilder sb = new StringBuilder();
+        while (T-- > 0) {
+            String[] inputs = br.readLine().split(" ");
+            int n = Integer.parseInt(inputs[0]);
+            int findIdx = Integer.parseInt(inputs[1]);
 
-        int t = Integer.parseInt(br.readLine());
+            List<Integer> priorities = new ArrayList<>();
 
-        for (int i = 0; i < t; i++) {
-            String[] input = br.readLine().split(" ");
-            int n = Integer.parseInt(input[0]);
-            int m = Integer.parseInt(input[1]);
-
-            Deque<Priority> deque = new ArrayDeque<>(); // 프린터 역할
-            List<Integer> priorities = new ArrayList<>(); // 중요도를 담는 list, 추후에 내림차순 정렬
-            input = br.readLine().split(" ");
-            for (int j = 0; j < n; j++) {
-                int number = Integer.parseInt(input[j]);
-                priorities.add(number);
-                deque.offer(new Priority(j, number)); // 입력 순서대로 담는다.
+            Queue<Problem> que = new LinkedList<>();
+            inputs = br.readLine().split(" ");
+            for (int idx = 0; idx < n; idx++) {
+                int priority = Integer.parseInt(inputs[idx]);
+                que.offer(new Problem(idx, priority));
+                priorities.add(priority);
             }
 
-            Collections.sort(priorities, Collections.reverseOrder()); // 중요도 내림차순 정렬
+            Collections.sort(priorities, Collections.reverseOrder());
 
-            int idx = 0;
-            int highestNumber = priorities.get(idx); // 가장 높은 중요도
+            int printCount = 0;
             while (true) {
-                Priority priority = deque.pollFirst(); // 프린터에서 가장 앞에서 대기 중인 Priority
-                if (priority.number == highestNumber) { // 해당 Priority가 중요도가 높을 때
-                    if (priority.order == m) { // 내가 찾는 값(m)일 때
-                        sb.append((idx + 1) + "\n");
-                        break;
-                    } else { // 중요도는 가장 높으나, 내가 찾는 값이 아니라면, 다음으로 가장 높은 중요도를 프린터에서 탐색 진행
-                        highestNumber = priorities.get(++idx);
-                    }
-                } else { // 프린터 가장 앞에 위치한 것이 중요도가 가장 높은게 아니라면, 가장 뒤로 보낸다.
-                    deque.offer(priority);
+                Problem poll = que.poll();
+                if (priorities.get(printCount) == poll.priority && poll.idx == findIdx) {
+                    sb.append(printCount + 1).append("\n");
+                    break;
+                }
+
+                if (poll.priority == priorities.get(printCount)) {
+                    printCount++;
+                } else {
+                    que.offer(poll);
                 }
             }
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
-    static class Priority {
+    static class Problem {
+        int idx;
+        int priority;
 
-        int order; // 처음에 Queue에 담긴 순서
-        int number; // 값
-
-        public Priority(int order, int number) {
-            this.order = order;
-            this.number = number;
+        public Problem(int idx, int priority) {
+            this.idx = idx;
+            this.priority = priority;
         }
     }
 }
