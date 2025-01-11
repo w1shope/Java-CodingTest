@@ -6,54 +6,46 @@ import java.util.Map;
 import java.util.TreeSet;
 
 public class Main {
-
-    static int N, M;
-    static TreeSet<Problem> set = new TreeSet<>((p1, p2) -> {
-        if (p1.difficulty == p2.difficulty) {
-            return p1.number - p2.number;
-        }
-        return p1.difficulty - p2.difficulty;
-    });
-    static Map<Integer, Problem> map = new HashMap<>(); // {문제 번호, 문제}
-
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        for (int i = 0; i < N; i++) {
+
+        TreeSet<Problem> set = new TreeSet<>((a, b) -> {
+            if (a.difficult == b.difficult) {
+                return a.number - b.number;
+            }
+            return a.difficult - b.difficult;
+        });
+        Map<Integer, Problem> map = new HashMap<>();
+
+        int n = Integer.parseInt(br.readLine());
+        for (int i = 0; i < n; i++) {
             String[] inputs = br.readLine().split(" ");
-            int problemNumber = Integer.parseInt(inputs[0]); // 문제 번호
-            int problemDifficulty = Integer.parseInt(inputs[1]); // 문제 난이도
-            Problem problem = new Problem(problemNumber, problemDifficulty);
-            set.add(problem);
-            map.put(problemNumber, problem);
+            Problem p = new Problem(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
+            set.add(p);
+            map.put(p.number, p);
         }
 
         StringBuilder sb = new StringBuilder();
-        M = Integer.parseInt(br.readLine());
-        for (int i = 0; i < M; i++) {
+
+        int m = Integer.parseInt(br.readLine());
+        for (int i = 0; i < m; i++) {
             String[] inputs = br.readLine().split(" ");
-            if (inputs.length == 3) { // add
-                int problemNumber = Integer.parseInt(inputs[1]);
-                int problemDifficulty = Integer.parseInt(inputs[2]);
-                Problem problem = new Problem(problemNumber, problemDifficulty);
-                set.add(problem);
-                map.put(problemNumber, problem);
-            } else {
-                if ("solved".equals(inputs[0])) { // solved
-                    int problemNumber = Integer.parseInt(inputs[1]);
-                    Problem removedProblem = map.remove(problemNumber);
-                    set.remove(removedProblem);
-                } else { // recommend
-                    int x = Integer.parseInt(inputs[1]);
-                    if (x == 1) {
-                        Problem problem = set.last();
-                        sb.append(problem.number + "\n");
-                    } else {
-                        Problem problem = set.first();
-                        sb.append(problem.number + "\n");
-                    }
+
+            String order = inputs[0];
+            int num = Integer.parseInt(inputs[1]);
+            if ("recommend".equals(order)) {
+                if (num == -1) {
+                    sb.append(set.first().number).append("\n");
+                } else {
+                    sb.append(set.last().number).append("\n");
                 }
+            } else if ("add".equals(order)) {
+                Problem p = new Problem(num, Integer.parseInt(inputs[2]));
+                map.put(p.number, p);
+                set.add(p);
+            } else {
+                set.remove(map.get(num));
+                map.remove(num);
             }
         }
 
@@ -61,12 +53,12 @@ public class Main {
     }
 
     static class Problem {
-        int number; // 문제 번호
-        int difficulty; // 난이도
+        int number;
+        int difficult;
 
-        public Problem(int number, int difficulty) {
+        public Problem(int number, int difficult) {
             this.number = number;
-            this.difficulty = difficulty;
+            this.difficult = difficult;
         }
     }
 }
