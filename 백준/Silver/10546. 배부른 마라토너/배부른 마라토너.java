@@ -7,8 +7,8 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
 
+        int n = Integer.parseInt(br.readLine());
         Map<String, Integer> map = new HashMap<>();
         for (int i = 0; i < n; i++) {
             String name = br.readLine();
@@ -20,9 +20,10 @@ public class Main {
             map.put(name, map.get(name) - 1);
         }
 
-        for (String key : map.keySet()) {
-            if (map.get(key) >= 1) {
-                System.out.println(key);
+        Object[] names = map.keySet().toArray();
+        for (Object name : names) {
+            if (map.get((String) name) > 0) {
+                System.out.print((String) name);
                 break;
             }
         }
