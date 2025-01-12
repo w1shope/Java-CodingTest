@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -12,36 +9,29 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        Map<String, Book> map = new HashMap<>(); // {책 이름, 인스턴스}
+        Map<String, Integer> map = new HashMap<>();
         for (int i = 0; i < n; i++) {
             String name = br.readLine();
-            if (map.containsKey(name)) {
-                Book book = map.get(name);
-                book.sellCount++;
-            } else {
-                map.put(name, new Book(name, 1));
+            map.put(name, map.getOrDefault(name, 0) + 1);
+        }
+
+        String answer = "";
+        int maxCount = 0;
+
+        Object[] objects = map.keySet().toArray();
+        for (Object obj : objects) {
+            String name = (String) obj;
+            int count = map.get(name);
+            if (count > maxCount) {
+                answer = name;
+                maxCount = count;
+            } else if (count == maxCount) {
+                if (name.compareTo(answer) < 0) {
+                    answer = name;
+                }
             }
         }
 
-        List<Book> books = new ArrayList<>(map.values());
-        Collections.sort(books, (a, b) -> {
-            if (a.sellCount == b.sellCount) {
-                return a.name.compareTo(b.name);
-            }
-            return b.sellCount - a.sellCount;
-        });
-
-        System.out.println(books.get(0).name);
-
-    }
-
-    static class Book {
-        String name;
-        int sellCount;
-
-        public Book(String name, int sellCount) {
-            this.name = name;
-            this.sellCount = sellCount;
-        }
+        System.out.println(answer);
     }
 }
