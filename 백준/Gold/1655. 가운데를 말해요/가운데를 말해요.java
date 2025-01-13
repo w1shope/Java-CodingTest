@@ -8,20 +8,22 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
-        StringBuilder sb = new StringBuilder();
+        int N = Integer.parseInt(br.readLine());
 
         PriorityQueue<Integer> min = new PriorityQueue<>();
         PriorityQueue<Integer> max = new PriorityQueue<>(Collections.reverseOrder());
 
-        for (int i = 0; i < n; i++) {
+        StringBuilder sb = new StringBuilder();
+        boolean flag = true;
+        while (N-- > 0) {
             int num = Integer.parseInt(br.readLine());
 
-            if (min.size() == max.size()) {
+            if (flag) {
                 max.offer(num);
             } else {
                 min.offer(num);
             }
+            flag = !flag;
 
             if (!min.isEmpty()) {
                 if (max.peek() > min.peek()) {
