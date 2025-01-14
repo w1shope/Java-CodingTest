@@ -11,9 +11,9 @@ public class Main {
         int M = Integer.parseInt(inputs[1]);
 
         inputs = br.readLine().split(" ");
-        boolean[] lights = new boolean[N + 1];
+        int[] lights = new int[N + 1];
         for (int i = 1; i <= N; i++) {
-            lights[i] = Integer.parseInt(inputs[i - 1]) == 1;
+            lights[i] = Integer.parseInt(inputs[i - 1]);
         }
 
         while (M-- > 0) {
@@ -24,25 +24,25 @@ public class Main {
             int b = Integer.parseInt(inputs[2]);
 
             if (order == 1) {
-                lights[a] = b == 1;
+                lights[a] = b;
             } else if (order == 2) {
                 for (int i = a; i <= b; i++) {
-                    lights[i] = !lights[i];
+                    lights[i] = lights[i] == 1 ? 0 : 1;
                 }
             } else if (order == 3) {
                 for (int i = a; i <= b; i++) {
-                    lights[i] = false;
+                    lights[i] = 0;
                 }
             } else {
                 for (int i = a; i <= b; i++) {
-                    lights[i] = true;
+                    lights[i] = 1;
                 }
             }
         }
 
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= N; i++) {
-            sb.append(lights[i] ? 1 : 0).append(" ");
+            sb.append(lights[i]).append(" ");
         }
 
         System.out.print(sb);
