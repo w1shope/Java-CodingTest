@@ -1,36 +1,33 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int count = 0;
-        int n = Integer.parseInt(br.readLine());
-        Map<Integer, Integer> cow = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            String[] input = br.readLine().split(" ");
-            int cowNum = Integer.parseInt(input[0]);
-            int location = Integer.parseInt(input[1]);
-            if (isMove(cow, cowNum, location))
-                count++;
-        }
-        System.out.println(count);
-    }
+        int[] cows = new int[11];
 
-    private static boolean isMove(Map<Integer, Integer> cow, int cowNum, int location) {
-        if (cow.get(cowNum) == null)
-            cow.put(cowNum, location);
-        else {
-            int state = cow.get(cowNum);
-            if (state != location) {
-                cow.put(cowNum, location);
-                return true;
+        int n = Integer.parseInt(br.readLine());
+
+        int moveCount = 0;
+        Set<Integer> set = new HashSet<>();
+
+        while (n-- > 0) {
+            String[] inputs = br.readLine().split(" ");
+            int cowNumber = Integer.parseInt(inputs[0]);
+            int move = Integer.parseInt(inputs[1]);
+
+            if (set.contains(cowNumber) && cows[cowNumber] != move) {
+                moveCount++;
+            } else {
+                set.add(cowNumber);
             }
+            cows[cowNumber] = move;
         }
-        return false;
+
+        System.out.print(moveCount);
     }
 }
