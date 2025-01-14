@@ -1,77 +1,79 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Main {
-    private static final int[] dx = {0, 0, -1, 1, -1, 1, -1, 1};
-    private static final int[] dy = {-1, 1, 0, 0, -1, -1, 1, 1};
+
+    static boolean[][] lands;
+    static int[] dx = {0, 0, -1, 1, -1, 1, -1, 1};
+    static int[] dy = {-1, 1, 0, 0, -1, -1, 1, 1};
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
 
-        int n = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
 
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            char[] tmp = br.readLine().toCharArray();
-            for (int j = 0; j < tmp.length; j++)
-                board[i][j] = tmp[j];
-        }
-
-        boolean meetLandMine = false;
-        char[][] result = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            String input = br.readLine();
-            for (int j = 0; j < input.length(); j++) {
-                if (input.charAt(j) == '.') {
-                    result[i][j] = '.';
-                } else {
-                    if (existLandMine(board, j, i))
-                        meetLandMine = true;
-                    result[i][j] = String.valueOf(traverseAround(board, j, i, n)).charAt(0);
+        lands = new boolean[N][N];
+        Queue<int[]> bombQue = new ArrayDeque<>();
+        for (int i = 0; i < N; i++) {
+            char[] row = br.readLine().toCharArray();
+            for (int j = 0; j < N; j++) {
+                if (row[j] == '*') {
+                    lands[i][j] = true;
+                    bombQue.offer(new int[]{i, j});
                 }
             }
         }
 
-        if (meetLandMine)
-            editResult(board, result);
+        String[][] result = new String[N][N];
+        boolean isMeetBomb = false;
+        for (int i = 0; i < N; i++) {
+            char[] row = br.readLine().toCharArray();
+            for (int j = 0; j < N; j++) {
+                if (row[j] == '.') {
+                    result[i][j] = ".";
+                } else {
+                    if (lands[i][j]) {
+                        isMeetBomb = true;
+                    } else {
+                        result[i][j] = getAroundBombCount(j, i) + "";
+                    }
+                }
+            }
+        }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++)
+        if (isMeetBomb) {
+            while (!bombQue.isEmpty()) {
+                int[] position = bombQue.poll();
+                result[position[0]][position[1]] = "*";
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
                 sb.append(result[i][j]);
+            }
             sb.append("\n");
         }
 
-        System.out.println(sb);
+        System.out.print(sb);
     }
 
-    private static int traverseAround(char[][] board, int x, int y, int size) {
+    static int getAroundBombCount(int x, int y) {
         int count = 0;
-        for (int i = 0; i < 8; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (ny < 0 || ny >= size || nx < 0 || nx >= size)
+        for (int d = 0; d < 8; d++) {
+            int cx = x + dx[d];
+            int cy = y + dy[d];
+            if (cx < 0 || cy < 0 || cx >= lands.length || cy >= lands.length) {
                 continue;
-            if (board[ny][nx] == '*')
+            }
+            if (lands[cy][cx]) {
                 count++;
-        }
-
-        return count;
-    }
-
-    private static boolean existLandMine(char[][] board, int x, int y) {
-        return board[y][x] == '*';
-    }
-
-    private static void editResult(char[][] board, char[][] result) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == '*')
-                    result[i][j] = '*';
             }
         }
+        return count;
     }
 }
