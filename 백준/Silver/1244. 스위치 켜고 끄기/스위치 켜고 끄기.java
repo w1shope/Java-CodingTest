@@ -17,7 +17,7 @@ public class Main {
         }
 
         int M = Integer.parseInt(br.readLine());
-        while (M-- > 0) {
+        for (int i = 0; i < M; i++) {
             inputs = br.readLine().split(" ");
             int a = Integer.parseInt(inputs[0]);
             int b = Integer.parseInt(inputs[1]);
@@ -36,31 +36,24 @@ public class Main {
         System.out.print(sb);
     }
 
-    static void changeLightState(boolean isMan, int number) {
+    static void changeLightState(boolean isMan, int idx) {
         if (isMan) {
-            for (int i = number; i < lights.length; i += number) {
+            for (int i = idx; i < lights.length; i += idx) {
                 lights[i] = getLightState(i);
             }
         } else {
-            lights[number] = getLightState(number);
+            lights[idx] = getLightState(idx);
 
-            int left = number - 1;
-            int right = number + 1;
-            while (true) {
-                if (left < 1 || right >= lights.length) {
+            int left = idx - 1;
+            int right = idx + 1;
+            while (left >= 1 && right < lights.length) {
+                if (lights[left] != lights[right]) {
                     break;
                 }
 
-                if (lights[left] == lights[right]) {
-                    int state = getLightState(left);
-                    lights[left] = state;
-                    lights[right] = state;
-                } else {
-                    break;
-                }
-
-                left--;
-                right++;
+                int state = getLightState(left);
+                lights[left--] = state;
+                lights[right++] = state;
             }
         }
     }
