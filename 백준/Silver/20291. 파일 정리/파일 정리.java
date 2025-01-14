@@ -1,35 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Main {
-
-    static int N;
-    static Map<String, Integer> map = new HashMap<>();
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < N; i++) {
-            String[] splits = br.readLine().split("\\.");
-            String extension = splits[1];
-            map.put(extension, map.getOrDefault(extension, 0) + 1);
+        int N = Integer.parseInt(br.readLine());
+        Map<String, Integer> map = new HashMap<>();
+        while (N-- > 0) {
+            String[] inputs = br.readLine().split("\\.");
+            map.put(inputs[1], map.getOrDefault(inputs[1], 0) + 1);
         }
 
-        List<String> extensions = new ArrayList<>(map.keySet());
-        Collections.sort(extensions);
+        Object[] objects = map.keySet().toArray();
+        Arrays.sort(objects);
 
-        StringBuilder answer = new StringBuilder();
-        for (String extension : extensions) {
-            answer.append(extension + " " + map.get(extension)).append("\n");
+        StringBuilder sb = new StringBuilder();
+        for (Object obj : objects) {
+            sb.append(obj).append(" ").append(map.get(obj)).append("\n");
         }
 
-        System.out.println(answer);
+        System.out.print(sb);
     }
 }
