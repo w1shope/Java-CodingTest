@@ -27,18 +27,18 @@ public class Main {
             }
         }
 
-        String[][] result = new String[N][N];
+        char[][] result = new char[N][N];
         boolean isMeetBomb = false;
         for (int i = 0; i < N; i++) {
             char[] row = br.readLine().toCharArray();
             for (int j = 0; j < N; j++) {
                 if (row[j] == '.') {
-                    result[i][j] = ".";
+                    result[i][j] = '.';
                 } else {
                     if (lands[i][j]) {
                         isMeetBomb = true;
                     } else {
-                        result[i][j] = getAroundBombCount(j, i) + "";
+                        result[i][j] = (char) ('0' + getAroundBombCount(j, i));
                     }
                 }
             }
@@ -47,7 +47,7 @@ public class Main {
         if (isMeetBomb) {
             while (!bombQue.isEmpty()) {
                 int[] position = bombQue.poll();
-                result[position[0]][position[1]] = "*";
+                result[position[0]][position[1]] = '*';
             }
         }
 
