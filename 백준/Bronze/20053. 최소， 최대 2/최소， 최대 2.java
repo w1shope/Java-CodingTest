@@ -1,27 +1,30 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.PriorityQueue;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+        int T = Integer.parseInt(br.readLine());
 
-        int t = Integer.parseInt(br.readLine());
-        for (int i = 0; i < t; i++) {
-            int min = Integer.MAX_VALUE;
-            int max = Integer.MIN_VALUE;
+        StringBuilder sb = new StringBuilder();
+        while (T-- > 0) {
             int n = Integer.parseInt(br.readLine());
-            String[] input = br.readLine().split(" ");
-            for(int j = 0; j < n; j++) {
-                int num = Integer.parseInt(input[j]);
-                min = Math.min(min, num);
-                max = Math.max(max, num);
+
+            PriorityQueue<Integer> min = new PriorityQueue<>();
+            PriorityQueue<Integer> max = new PriorityQueue<>(Collections.reverseOrder());
+
+            for (String num : br.readLine().split(" ")) {
+                int val = Integer.parseInt(num);
+                min.offer(val);
+                max.offer(val);
             }
-            sb.append(min + " " + max + "\n");
+
+            sb.append(min.poll()).append(" ").append(max.poll()).append("\n");
         }
 
-        System.out.println(sb);
+        System.out.print(sb);
     }
 }
