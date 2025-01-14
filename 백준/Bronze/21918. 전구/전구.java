@@ -1,49 +1,50 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] input = br.readLine().split(" ");
-        int n = Integer.parseInt(input[0]);
-        int m = Integer.parseInt(input[1]);
+        String[] inputs = br.readLine().split(" ");
+        int N = Integer.parseInt(inputs[0]);
+        int M = Integer.parseInt(inputs[1]);
 
-        int[] light = new int[n + 1];
-
-        input = br.readLine().split(" ");
-        for (int i = 0; i < n; i++)
-            light[i + 1] = Integer.parseInt(input[i]);
-
-        for (int i = 0; i < m; i++) {
-            input = br.readLine().split(" ");
-            int a = Integer.parseInt(input[0]);
-            int b = Integer.parseInt(input[1]);
-            int c = Integer.parseInt(input[2]);
-            work(light, a, b, c);
+        inputs = br.readLine().split(" ");
+        boolean[] lights = new boolean[N + 1];
+        for (int i = 1; i <= N; i++) {
+            lights[i] = Integer.parseInt(inputs[i - 1]) == 1;
         }
 
-        Arrays.stream(light).skip(1).forEach(state -> System.out.print(state + " "));
-    }
+        while (M-- > 0) {
+            inputs = br.readLine().split(" ");
 
-    private static void work(int[] light, int a, int b, int c) {
-        switch (a) {
-            case 1:
-                light[b] = c;
-                break;
-            case 2:
-                for (int i = b; i <= c; i++)
-                    light[i] = light[i] == 0 ? 1 : 0;
-                break;
-            case 3:
-                for (int i = b; i <= c; i++)
-                    light[i] = 0;
-                break;
-            default:
-                for (int i = b; i <= c; i++)
-                    light[i] = 1;
+            int order = Integer.parseInt(inputs[0]);
+            int a = Integer.parseInt(inputs[1]);
+            int b = Integer.parseInt(inputs[2]);
+
+            if (order == 1) {
+                lights[a] = b == 1;
+            } else if (order == 2) {
+                for (int i = a; i <= b; i++) {
+                    lights[i] = !lights[i];
+                }
+            } else if (order == 3) {
+                for (int i = a; i <= b; i++) {
+                    lights[i] = false;
+                }
+            } else {
+                for (int i = a; i <= b; i++) {
+                    lights[i] = true;
+                }
+            }
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            sb.append(lights[i] ? 1 : 0).append(" ");
+        }
+
+        System.out.print(sb);
     }
 }
