@@ -3,58 +3,69 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    private static int[] light;
+
+    static int[] lights;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(br.readLine());
+        lights = new int[N + 1];
+        String[] inputs = br.readLine().split(" ");
+        for (int i = 1; i <= N; i++) {
+            lights[i] = Integer.parseInt(inputs[i - 1]);
+        }
+
+        int M = Integer.parseInt(br.readLine());
+        while (M-- > 0) {
+            inputs = br.readLine().split(" ");
+            int a = Integer.parseInt(inputs[0]);
+            int b = Integer.parseInt(inputs[1]);
+
+            changeLightState(a == 1, b);
+        }
+
         StringBuilder sb = new StringBuilder();
-
-        int n = Integer.parseInt(br.readLine());
-        light = new int[n];
-        String[] input = br.readLine().split(" ");
-        for (int i = 0; i < n; i++)
-            light[i] = Integer.parseInt(input[i]);
-
-        int personNum = Integer.parseInt(br.readLine());
-        for (int i = 0; i < personNum; i++) {
-            input = br.readLine().split(" ");
-            int gender = Integer.parseInt(input[0]);
-            int num = Integer.parseInt(input[1]);
-            changeSwitch(gender, num);
-        }
-
-        int count = 0;
-        for (int i = 0; i < n; i++) {
-            if (count == 20) {
+        for (int i = 1; i <= N; i++) {
+            sb.append(lights[i]).append(" ");
+            if (i % 20 == 0) {
                 sb.append("\n");
-                count = 0;
             }
-            sb.append(light[i] + " ");
-            count++;
         }
-        System.out.println(sb);
+
+        System.out.print(sb);
     }
 
-    private static void changeSwitch(int gender, int num) {
-        switch (gender) {
-            case 1:
-                for (int i = num - 1; i < light.length; i += num)
-                    light[i] = light[i] == 1 ? 0 : 1;
-                break;
-            default:
-                light[num - 1] = light[num - 1] == 1 ? 0 : 1;
-                for (int i = 1; ; i++) {
-                    if ((num - 1) - i < 0 || (num - 1) + i >= light.length)
-                        return;
-                    int num1 = (num - 1) - i;
-                    int num2 = (num - 1) + i;
-                    if (light[num1] != light[num2]) {
-                        return;
-                    } else {
-                        light[num1] = light[num1] == 1 ? 0 : 1;
-                        light[num2] = light[num2] == 1 ? 0 : 1;
-                    }
+    static void changeLightState(boolean isMan, int number) {
+        if (isMan) {
+            for (int i = number; i < lights.length; i += number) {
+                lights[i] = getLightState(i);
+            }
+        } else {
+            lights[number] = getLightState(number);
+
+            int left = number - 1;
+            int right = number + 1;
+            while (true) {
+                if (left < 1 || right >= lights.length) {
+                    break;
                 }
+
+                if (lights[left] == lights[right]) {
+                    int state = getLightState(left);
+                    lights[left] = state;
+                    lights[right] = state;
+                } else {
+                    break;
+                }
+
+                left--;
+                right++;
+            }
         }
+    }
+
+    static int getLightState(int idx) {
+        return lights[idx] == 1 ? 0 : 1;
     }
 }
