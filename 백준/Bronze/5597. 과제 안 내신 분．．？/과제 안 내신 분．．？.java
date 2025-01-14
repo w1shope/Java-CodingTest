@@ -1,20 +1,22 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int[] submit = new int[31];
+        Set<Integer> set = new HashSet<>();
         for (int i = 0; i < 28; i++) {
-            int studentNum = Integer.parseInt(br.readLine());
-            submit[studentNum] = 1;
+            set.add(Integer.parseInt(br.readLine()));
         }
 
-        for (int i = 1; i < 31; i++) {
-            if (submit[i] == 0)
+        for (int i = 1; i <= 30; i++) {
+            if (!set.contains(i)) {
                 System.out.println(i);
+            }
         }
     }
 }
