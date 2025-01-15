@@ -1,47 +1,46 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n, d;
-    static int[][] arr, copy;
+    static int N, D;
+    static int[][] original;
+    static int[][] rotate;
 
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stringTokenizer;
         StringBuilder sb = new StringBuilder();
 
-        int testCase = Integer.parseInt(br.readLine());
+        int T = Integer.parseInt(br.readLine());
+        while (T-- > 0) {
+            String[] inputs = br.readLine().split(" ");
+            N = Integer.parseInt(inputs[0]);
+            D = Integer.parseInt(inputs[1]);
 
-        while (testCase-- > 0) {
-            stringTokenizer = new StringTokenizer(br.readLine());
-            n = Integer.parseInt(stringTokenizer.nextToken());
-            d = Integer.parseInt(stringTokenizer.nextToken());
-
-            if (d < 0)
-                d += 360;
-            d /= 45;
-
-            arr = new int[n][n];
-            copy = new int[n][n];
-            for (int i = 0; i < n; i++) {
-                stringTokenizer = new StringTokenizer(br.readLine());
-                for (int j = 0; j < n; j++) {
-                    arr[i][j] = Integer.parseInt(stringTokenizer.nextToken());
-                    copy[i][j] = arr[i][j];
+            original = new int[N][N];
+            rotate = new int[N][N];
+            for (int i = 0; i < N; i++) {
+                inputs = br.readLine().split(" ");
+                for (int j = 0; j < N; j++) {
+                    original[i][j] = Integer.parseInt(inputs[j]);
+                    rotate[i][j] = original[i][j];
                 }
             }
 
-            while (d-- > 0) {
-                rotateArr();
+            if (D < 0) {
+                D += 360;
+            }
+            D /= 45;
+
+            while (D-- > 0) {
+                cw();
             }
 
-            for (int[] ar : arr) {
-                for (int a : ar)
-                    sb.append(a + " ");
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    sb.append(original[i][j]).append(" ");
+                }
                 sb.append("\n");
             }
         }
@@ -49,18 +48,17 @@ public class Main {
         System.out.println(sb);
     }
 
-    private static void rotateArr() {
-
-        for (int i = 0; i < n; i++) {
-            copy[i][n / 2] = arr[i][i];
-            copy[i][i] = arr[n / 2][i];
-            copy[n / 2][i] = arr[n - i - 1][i];
-            copy[n - i - 1][i] = arr[n - i - 1][n / 2];
+    static void cw() {
+        for (int i = 0; i < N; i++) {
+            rotate[i][N / 2] = original[i][i];
+            rotate[i][i] = original[N / 2][i];
+            rotate[N / 2][i] = original[N - i - 1][i];
+            rotate[N - i - 1][i] = original[N - i - 1][N / 2];
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                arr[i][j] = copy[i][j];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                original[i][j] = rotate[i][j];
             }
         }
     }
