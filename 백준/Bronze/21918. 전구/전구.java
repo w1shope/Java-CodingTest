@@ -10,41 +10,43 @@ public class Main {
         int N = Integer.parseInt(inputs[0]);
         int M = Integer.parseInt(inputs[1]);
 
+        boolean[] lights = new boolean[N];
         inputs = br.readLine().split(" ");
-        int[] lights = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            lights[i] = Integer.parseInt(inputs[i - 1]);
+        for (int i = 0; i < N; i++) {
+            lights[i] = inputs[i].equals("1");
         }
 
-        while (M-- > 0) {
+        for (int i = 0; i < M; i++) {
             inputs = br.readLine().split(" ");
-
             int order = Integer.parseInt(inputs[0]);
             int a = Integer.parseInt(inputs[1]);
             int b = Integer.parseInt(inputs[2]);
 
             if (order == 1) {
-                lights[a] = b;
+                changeLightState(lights, a - 1, b == 1);
             } else if (order == 2) {
-                for (int i = a; i <= b; i++) {
-                    lights[i] = lights[i] == 1 ? 0 : 1;
+                for (int j = a - 1; j < b; j++) {
+                    changeLightState(lights, j, !lights[j]);
                 }
             } else if (order == 3) {
-                for (int i = a; i <= b; i++) {
-                    lights[i] = 0;
+                for (int j = a - 1; j < b; j++) {
+                    changeLightState(lights, j, false);
                 }
             } else {
-                for (int i = a; i <= b; i++) {
-                    lights[i] = 1;
+                for (int j = a - 1; j < b; j++) {
+                    changeLightState(lights, j, true);
                 }
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= N; i++) {
-            sb.append(lights[i]).append(" ");
+        for (boolean light : lights) {
+            sb.append(light ? 1 : 0).append(" ");
         }
+        System.out.println(sb);
+    }
 
-        System.out.print(sb);
+    static void changeLightState(boolean[] lights, int idx, boolean state) {
+        lights[idx] = state;
     }
 }
