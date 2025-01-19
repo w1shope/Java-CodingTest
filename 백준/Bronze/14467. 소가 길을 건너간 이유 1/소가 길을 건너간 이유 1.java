@@ -1,33 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int[] cows = new int[11];
+        int N = Integer.parseInt(br.readLine());
 
-        int n = Integer.parseInt(br.readLine());
+        int[] dirs = new int[N + 1];
+        Arrays.fill(dirs, -1);
+        int count = 0;
 
-        int moveCount = 0;
-        Set<Integer> set = new HashSet<>();
-
-        while (n-- > 0) {
+        while (N-- > 0) {
             String[] inputs = br.readLine().split(" ");
-            int cowNumber = Integer.parseInt(inputs[0]);
-            int move = Integer.parseInt(inputs[1]);
+            int cow = Integer.parseInt(inputs[0]);
+            int dir = Integer.parseInt(inputs[1]);
 
-            if (set.contains(cowNumber) && cows[cowNumber] != move) {
-                moveCount++;
-            } else {
-                set.add(cowNumber);
+            if (dirs[cow] != -1 && dirs[cow] != dir) {
+                count++;
             }
-            cows[cowNumber] = move;
+            dirs[cow] = dir;
         }
 
-        System.out.print(moveCount);
+        System.out.println(count);
     }
 }
