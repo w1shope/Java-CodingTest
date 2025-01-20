@@ -5,31 +5,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Main {
+
+    static int N, M;
+    static int[] trains;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String[] inputs = br.readLine().split(" ");
-        int N = Integer.parseInt(inputs[0]);
-        int M = Integer.parseInt(inputs[1]);
+        N = Integer.parseInt(inputs[0]);
+        M = Integer.parseInt(inputs[1]);
 
-        int[] trains = new int[N];
+        trains = new int[N];
+
         while (M-- > 0) {
             inputs = br.readLine().split(" ");
             int order = Integer.parseInt(inputs[0]);
             int trainIdx = Integer.parseInt(inputs[1]) - 1;
 
+            int seatIdx;
             if (order == 1) {
-                int seatIdx = Integer.parseInt(inputs[2]) - 1;
+                seatIdx = Integer.parseInt(inputs[2]) - 1;
                 trains[trainIdx] |= (1 << seatIdx);
             } else if (order == 2) {
-                int seatIdx = Integer.parseInt(inputs[2]) - 1;
+                seatIdx = Integer.parseInt(inputs[2]) - 1;
                 trains[trainIdx] &= ~(1 << seatIdx);
             } else if (order == 3) {
-                trains[trainIdx] <<= 1;
-                trains[trainIdx] &= ~(1 << 20);
+                trains[trainIdx] = (trains[trainIdx] << 1) & ~(1 << 20);
             } else {
                 trains[trainIdx] >>= 1;
-                trains[trainIdx] &= ~(1 << 20);
             }
         }
 
