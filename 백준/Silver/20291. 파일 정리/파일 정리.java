@@ -8,22 +8,22 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+
+        Map<String, Integer> map = new HashMap<>();
 
         int N = Integer.parseInt(br.readLine());
-        Map<String, Integer> map = new HashMap<>();
         while (N-- > 0) {
-            String[] inputs = br.readLine().split("\\.");
-            map.put(inputs[1], map.getOrDefault(inputs[1], 0) + 1);
+            String[] split = br.readLine().split("\\.");
+            map.put(split[1], map.getOrDefault(split[1], 0) + 1);
         }
 
         Object[] objects = map.keySet().toArray();
         Arrays.sort(objects);
 
-        StringBuilder sb = new StringBuilder();
         for (Object obj : objects) {
             sb.append(obj).append(" ").append(map.get(obj)).append("\n");
         }
-
-        System.out.print(sb);
+        System.out.println(sb);
     }
 }
