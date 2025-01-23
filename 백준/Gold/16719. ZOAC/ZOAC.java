@@ -6,17 +6,16 @@ public class Main {
 
     static String str;
     static boolean[] visited;
-    static StringBuilder answer = new StringBuilder();
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         str = br.readLine();
         visited = new boolean[str.length()];
-
         recur(0, str.length() - 1);
 
-        System.out.println(answer);
+        System.out.println(sb);
     }
 
     static void recur(int left, int right) {
@@ -26,21 +25,26 @@ public class Main {
 
         int idx = left;
         for (int i = left; i <= right; i++) {
-            if (str.charAt(i) < str.charAt(idx)) {
+            if (str.charAt(idx) > str.charAt(i)) {
                 idx = i;
             }
         }
-        visited[idx] = true;
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < visited.length; i++) {
-            if (visited[i]) {
-                sb.append(str.charAt(i));
-            }
-        }
-        answer.append(sb).append("\n");
+        visited[idx] = true;
+        print();
 
         recur(idx + 1, right);
         recur(left, idx - 1);
+    }
+
+    static void print() {
+        StringBuilder tmp = new StringBuilder();
+        for (int i = 0; i < visited.length; i++) {
+            if (visited[i]) {
+                tmp.append(str.charAt(i));
+            }
+        }
+
+        sb.append(tmp).append("\n");
     }
 }
