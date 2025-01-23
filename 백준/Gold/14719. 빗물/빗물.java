@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    static int N, M;
+    static int width, height;
     static int[] arr;
     static int sum;
 
@@ -12,31 +12,34 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String[] inputs = br.readLine().split(" ");
-        N = Integer.parseInt(inputs[0]);
-        M = Integer.parseInt(inputs[1]);
+        height = Integer.parseInt(inputs[0]);
+        width = Integer.parseInt(inputs[1]);
 
-        arr = new int[M];
+        arr = new int[width];
+
         inputs = br.readLine().split(" ");
-        for (int i = 0; i < M; i++) {
-            arr[i] = Integer.parseInt(inputs[i]);
+        for (int x = 0; x < width; x++) {
+            arr[x] = Integer.parseInt(inputs[x]);
         }
 
-        for (int i = 1; i < M - 1; i++) {
-            int left = 0, right = 0;
+        for (int x = 1; x < width - 1; x++) {
+            int left = maxHeight(0, x - 1);
+            int right = maxHeight(x + 1, width - 1);
+            int min = Math.min(left, right);
 
-            for (int j = 0; j < i; j++) {
-                left = Math.max(left, arr[j]);
-            }
-            for (int j = i + 1; j < M; j++) {
-                right = Math.max(right, arr[j]);
-            }
-
-            if (left > arr[i] && right > arr[i]) {
-                sum += Math.min(left, right) - arr[i];
+            if (min - arr[x] > 0) {
+                sum += min - arr[x];
             }
         }
 
         System.out.println(sum);
     }
 
+    static int maxHeight(int left, int right) {
+        int max = Integer.MIN_VALUE;
+        for (int x = left; x <= right; x++) {
+            max = Math.max(max, arr[x]);
+        }
+        return max;
+    }
 }
