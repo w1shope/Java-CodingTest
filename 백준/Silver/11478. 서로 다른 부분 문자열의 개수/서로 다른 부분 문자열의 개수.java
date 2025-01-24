@@ -14,20 +14,12 @@ public class Main {
 
         input = br.readLine();
         for (int i = 0; i < input.length(); i++) {
-            dfs(input.charAt(i) + "", i);
+            for (int j = i + 1; j <= input.length(); j++) {
+                set.add(input.substring(i, j));
+            }
         }
 
         System.out.println(set.size());
     }
 
-    static void dfs(String str, int idx) {
-        if (idx >= input.length()) {
-            return;
-        }
-
-        str += input.charAt(idx);
-        set.add(str);
-
-        dfs(str, idx + 1);
-    }
 }
