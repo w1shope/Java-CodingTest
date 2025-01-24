@@ -5,54 +5,66 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Main {
 
     static int N, M;
+    static int[] truth;
     static int[] parent;
-    static List<Integer> truthList = new ArrayList<>();
+    static List<List<Integer>> parties = new ArrayList<>();
+    static Set<Integer> truthSet = new HashSet<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] inputs = br.readLine().split(" ");
-        N = Integer.parseInt(inputs[0]);
-        M = Integer.parseInt(inputs[1]);
-
-        inputs = br.readLine().split(" ");
-        for (int i = 1; i < inputs.length; i++) {
-            truthList.add(Integer.parseInt(inputs[i]));
-        }
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
         parent = new int[N + 1];
         for (int i = 1; i <= N; i++) {
             parent[i] = i;
         }
 
-        List<List<Integer>> partyList = new ArrayList<>();
-        for (int i = 0; i < M; i++) {
-            List<Integer> party = new ArrayList<>();
-            inputs = br.readLine().split(" ");
-            int start = Integer.parseInt(inputs[1]);
-            party.add(start);
-            for (int j = 2; j < inputs.length; j++) {
-                int next = Integer.parseInt(inputs[j]);
-                party.add(next);
-                union(start, next);
-            }
-            partyList.add(party);
+        st = new StringTokenizer(br.readLine());
+        int truthSize = Integer.parseInt(st.nextToken());
+        truth = new int[truthSize];
+        for (int i = 0; i < truthSize; i++) {
+            truth[i] = Integer.parseInt(st.nextToken());
         }
 
-        Set<Integer> truthSet = new HashSet<>();
-        for (int i = 0; i < truthList.size(); i++) {
-            truthSet.add(find(truthList.get(i)));
+        for (int i = 0; i <= N; i++) {
+            parties.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int partySize = Integer.parseInt(st.nextToken());
+            List<Integer> party = new ArrayList<>();
+            int start = -1;
+            for (int j = 0; j < partySize; j++) {
+                int person = Integer.parseInt(st.nextToken());
+                if (party.isEmpty()) {
+                    start = person;
+                    party.add(start);
+                } else {
+                    union(start, person);
+                    party.add(find(person));
+                }
+            }
+            parties.add(party);
+        }
+
+        for (int person : truth) {
+            truthSet.add(find(person));
         }
 
         int count = M;
-        for (int i = 0; i < M; i++) {
-            List<Integer> party = partyList.get(i);
-            for (int j = 0; j < party.size(); j++) {
-                if (truthSet.contains(find(party.get(j)))) {
+        for (int i = 0; i < parties.size(); i++) {
+            List<Integer> party = parties.get(i);
+            for (int person : party) {
+                if (truthSet.contains(find(person))) {
                     count--;
                     break;
                 }
@@ -74,10 +86,10 @@ public class Main {
         y = find(y);
 
         if (x != y) {
-            if (x < y) {
-                parent[y] = x;
-            } else {
+            if (x > y) {
                 parent[x] = y;
+            } else {
+                parent[y] = x;
             }
         }
     }
