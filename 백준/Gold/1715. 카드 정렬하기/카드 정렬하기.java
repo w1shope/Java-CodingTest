@@ -4,27 +4,24 @@ import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 
 public class Main {
-    private static PriorityQueue<Long> priorityQue = new PriorityQueue<>();
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
-        for (int i = 0; i < n; i++)
-            priorityQue.add(Long.parseLong(br.readLine()));
+        int N = Integer.parseInt(br.readLine());
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        while (N-- > 0) {
+            pq.offer(Integer.parseInt(br.readLine()));
+        }
 
         long sum = 0L;
-        while (priorityQue.size() > 1) {
-            sum += compare();
+        while (pq.size() > 1) {
+            int num1 = pq.poll();
+            int num2 = pq.poll();
+            sum += num1 + num2;
+            pq.offer(num1 + num2);
         }
 
         System.out.println(sum);
-    }
-
-    private static long compare() {
-        long num1 = priorityQue.poll();
-        long num2 = priorityQue.poll();
-        priorityQue.add(num1 + num2);
-        return num1 + num2;
     }
 }
