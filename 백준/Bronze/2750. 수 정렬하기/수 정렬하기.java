@@ -10,15 +10,18 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            list.add(Integer.parseInt(br.readLine()));
+        }
 
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < n; i++)
-            result.add(Integer.parseInt(br.readLine()));
+        Collections.sort(list);
 
-        Collections.sort(result);
-        result.stream().forEach(num -> sb.append(num + "\n"));
-
+        for (int num : list) {
+            sb.append(num).append("\n");
+        }
         System.out.println(sb);
+
     }
 }
