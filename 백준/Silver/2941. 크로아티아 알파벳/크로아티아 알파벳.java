@@ -1,44 +1,40 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    static final List<String> words = new ArrayList<>();
+
+    static List<String> words = List.of(
+            "c=", "c-", "dz=", "d-", "lj", "nj", "s=", "z="
+    );
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String input = br.readLine();
 
-        init();
-
+        String str = br.readLine();
         int count = 0;
-        while (input.length() > 0) {
-            boolean isChange = false;
-            for (int i = 0; i < words.size(); i++) {
-                int length = words.get(i).length();
-                if (input.length() >= length && input.substring(0, length).equals(words.get(i))) {
-                    input = input.substring(length);
-                    isChange = true;
+        while (true) {
+            if (str.isBlank()) {
+                break;
+            }
+
+            String croatia = null;
+            for (String word : words) {
+                if (str.startsWith(word)) {
+                    croatia = word;
                     break;
                 }
             }
-            if (!isChange)
-                input = input.substring(1);
+
+            if (croatia == null) {
+                str = str.substring(1);
+            } else {
+                str = str.substring(croatia.length());
+            }
             count++;
         }
-        System.out.println(count);
-    }
 
-    static void init() {
-        words.add("c=");
-        words.add("c-");
-        words.add("dz=");
-        words.add("d-");
-        words.add("lj");
-        words.add("nj");
-        words.add("s=");
-        words.add("z=");
+        System.out.println(count);
     }
 }
