@@ -5,21 +5,23 @@ import java.io.InputStreamReader;
 public class Main {
 
     static int N;
-    static int count;
+    static char[] arr;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
-        char[] arr = br.readLine().toCharArray();
+        arr = br.readLine().toCharArray();
 
-        for (int x = 0; x < N - 1; x++) {
-            if (arr[x] == 'E' && arr[x + 1] == 'W') {
+        int count = 0;
+        char prev = arr[0];
+        for (int i = 1; i < N; i++) {
+            if (arr[i] == 'W' && prev == 'E') {
                 count++;
             }
+            prev = arr[i];
         }
 
         System.out.println(count);
     }
-
 }
