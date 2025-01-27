@@ -5,10 +5,15 @@ import java.io.InputStreamReader;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int num = 1;
-        for (int i = 1; i <= n; i++)
-            num *= i;
-        System.out.println(num);
+
+        int N = Integer.parseInt(br.readLine());
+        System.out.println(factorial(N));
+    }
+
+    static int factorial(int num) {
+        if (num <= 1) {
+            return 1;
+        }
+        return num * factorial(num - 1);
     }
 }
