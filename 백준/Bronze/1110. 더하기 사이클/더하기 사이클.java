@@ -7,28 +7,17 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int original = Integer.parseInt(br.readLine());
-
-        int count = 0;
         int num = original;
+        int count = 0;
 
         while (true) {
             if (count > 0 && original == num) {
                 break;
             }
 
-            int a;
-            int b;
-
-            if (num >= 0 && num <= 9) {
-                a = 0;
-                b = num;
-            } else {
-                a = num / 10;
-                b = num % 10;
-            }
-
-            int sum = a + b;
-            num = b * 10 + (sum % 10);
+            int front = num / 10;
+            int back = num % 10;
+            num = back * 10 + (front + back) % 10;
             count++;
         }
 
