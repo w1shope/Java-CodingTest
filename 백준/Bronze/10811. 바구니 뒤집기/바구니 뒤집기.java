@@ -36,14 +36,13 @@ public class Main {
     }
 
     static void reverse(int s, int e) {
-        int[] tmp = new int[N + 1];
-        for (int i = 0; i <= e - s; i++) {
-            tmp[s + i] = arr[e - i];
-        }
-
-        while (s <= e) {
-            arr[s] = tmp[s];
-            s++;
+        int a = s, b = e;
+        for (int i = 0; i <= (e - s) / 2; i++) {
+            int tmp = arr[a];
+            arr[a] = arr[b];
+            arr[b] = tmp;
+            a++;
+            b--;
         }
     }
 }
