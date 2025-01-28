@@ -1,23 +1,25 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
+
+    static List<Integer> list = new ArrayList<>();
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int n = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
 
-        int[] dp = new int[n + 1];
-
-        for (int i = 0; i <= n; i++) {
-            if (i == 0)
-                dp[i] = 0;
-            else if (i == 1)
-                dp[i] = 1;
-            else
-                dp[i] = dp[i - 1] + dp[i - 2];
+        list.add(0);
+        list.add(1);
+        while (list.size() <= N) {
+            int size = list.size();
+            list.add(list.get(size - 2) + list.get(size - 1));
         }
-        System.out.println(dp[n]);
+
+        System.out.println(list.get(N));
     }
 }
