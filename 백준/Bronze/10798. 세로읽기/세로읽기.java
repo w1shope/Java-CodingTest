@@ -3,26 +3,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    static char[][] inputs = new char[5][15];
+
+    static char[][] arr = new char[5][15];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
 
         for (int i = 0; i < 5; i++) {
-            String input = br.readLine();
-            for (int j = 0; j < input.length(); j++) {
-                inputs[i][j] = input.charAt(j);
+            char[] tmp = br.readLine().toCharArray();
+            for (int j = 0; j < tmp.length; j++) {
+                arr[i][j] = tmp[j];
             }
         }
 
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 5; j++) {
-                // '\0' : 문자열의 끝
-                if (inputs[j][i] == '\0') {
-                    continue;
-                } else
-                    sb.append(inputs[j][i]);
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < 15; j++) {
+            for (int i = 0; i < 5; i++) {
+                if (arr[i][j] != 0) {
+                    sb.append(arr[i][j]);
+                }
             }
         }
 
