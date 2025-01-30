@@ -1,38 +1,36 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 public class Main {
-
-    static int N, M;
-
     public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        M = sc.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int min = Integer.MAX_VALUE;
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
+
+        int min = -1;
         int sum = 0;
-        for (int num = N; num <= M; num++) {
-            if(num == 1) {
+        for (int i = N; i <= M; i++) {
+            if (i == 1) {
                 continue;
             }
-            if (isPrime(num)) {
-                sum += num;
-                min = Math.min(min, num);
+
+            if (isPrimeNumber(i)) {
+                sum += i;
+                min = min == -1 ? i : min;
             }
         }
 
-        if (sum == 0) { // 소수 없음
+        if (min == -1) {
             System.out.println(-1);
         } else {
             System.out.println(sum);
             System.out.println(min);
         }
-
-
     }
 
-    static boolean isPrime(int num) {
+    static boolean isPrimeNumber(int num) {
         for (int i = 2; i < num; i++) {
             if (num % i == 0) {
                 return false;
