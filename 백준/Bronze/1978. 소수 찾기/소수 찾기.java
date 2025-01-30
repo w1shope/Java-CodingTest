@@ -1,37 +1,39 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(br.readLine());
-        int[] numbers = Arrays.stream(br.readLine().split(" "))
-                .mapToInt(Integer::valueOf)
-                .toArray();
-
-        int result = 0;
-        for (int number : numbers) {
-            if (number == 1) {
-                continue;
-            }
-            int sqrt = (int) Math.sqrt(number);
-            boolean flag = false;
-            for (int i = 2; i <= sqrt; i++) {
-                if (number % i == 0) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                result++;
-            }
+        int N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int primeCount = 0;
+        while (st.hasMoreTokens()) {
+            primeCount += isPrimeNumber(Integer.parseInt(st.nextToken())) ? 1 : 0;
         }
 
-        System.out.println(result);
+        System.out.println(primeCount);
+    }
 
+    static boolean isPrimeNumber(int num) {
+        if (num == 1) {
+            return false;
+        }
+        if (num == 2) {
+            return true;
+        }
+        if (num % 2 == 0) {
+            return false;
+        }
+
+        for (int i = 3; i * i <= num; i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
