@@ -1,13 +1,11 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 
 public class Main {
-
-    static Map<Integer, Integer> map = new TreeMap<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,22 +13,37 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        List<Integer> nums = new ArrayList<>();
         while (st.hasMoreTokens()) {
-            int value = Integer.parseInt(st.nextToken());
+            nums.add(Integer.parseInt(st.nextToken()));
+        }
 
-            for (int i = 1; i <= value; i++) {
-                if (value % i == 0) {
-                    map.put(i, map.getOrDefault(i, 0) + 1);
-                }
-            }
+        int gcd = nums.get(0);
+        for (int i = 1; i < N; i++) {
+            gcd = gcd(gcd, nums.get(i));
         }
 
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            if (entry.getValue() == N) {
-                sb.append(entry.getKey()).append("\n");
+        for (int i = 1; i <= gcd; i++) {
+            boolean flag = true;
+            for (int j = 0; j < N; j++) {
+                if (nums.get(j) % i != 0) {
+                    flag = false;
+                    break;
+                }
+            }
+            
+            if (flag) {
+                sb.append(i).append("\n");
             }
         }
         System.out.println(sb);
+    }
+
+    static int gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
     }
 }
