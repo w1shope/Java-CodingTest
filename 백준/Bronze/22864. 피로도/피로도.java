@@ -1,44 +1,35 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
     static int A, B, C, M;
+    static int work;
+    static int fatigue;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[] inputs = Arrays.stream(br.readLine().split(" "))
-                .mapToInt(Integer::valueOf)
-                .toArray();
-        A = inputs[0]; // 1시간마다 쌓이는 피로도
-        B = inputs[1]; // 1시간마다 쌓이는 처리량
-        C = inputs[2]; // 1시간마다 회복되는 피로도
-        M = inputs[3]; // 피로도 최대량
 
-        System.out.println(answer());
-    }
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        A = Integer.parseInt(st.nextToken());
+        B = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-    static int answer() {
-        int fatigue = 0; // 피로도
-        int passedHour = 0; // 지난 시간, 24시간 지나면 종료
-        int throughput = 0; // 처리량
-
-        while (passedHour < 24) {
-            if (fatigue + A > M) { // 최대 피로도를 넘길 수 없다.
-                fatigue -= C; // 휴식한다.
+        for (int time = 1; time <= 24; time++) {
+            if (fatigue + A > M) {
+                fatigue -= C;
                 if (fatigue < 0) {
                     fatigue = 0;
                 }
             } else {
                 fatigue += A;
-                throughput += B;
+                work += B;
             }
-            passedHour++;
         }
 
-        return throughput;
+        System.out.println(work);
     }
-
 }
