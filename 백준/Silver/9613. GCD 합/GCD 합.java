@@ -11,15 +11,17 @@ public class Main {
         int T = Integer.parseInt(br.readLine());
         while (T-- > 0) {
             String[] inputs = br.readLine().split(" ");
-
-            long sum = 0L;
+            int[] arr = new int[inputs.length - 1];
             for (int i = 1; i < inputs.length; i++) {
-                for (int j = i + 1; j < inputs.length; j++) {
-                    int gcd = gcd(Integer.parseInt(inputs[i]), Integer.parseInt(inputs[j]));
-                    sum += gcd;
-                }
+                arr[i - 1] = Integer.parseInt(inputs[i]);
             }
 
+            long sum = 0L;
+            for (int i = 0; i < arr.length; i++) {
+                for (int j = i + 1; j < arr.length; j++) {
+                    sum += gcd(arr[i], arr[j]);
+                }
+            }
             sb.append(sum).append("\n");
         }
 
