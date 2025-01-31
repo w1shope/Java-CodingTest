@@ -3,37 +3,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
-        Set<String> set = new HashSet<>();
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            String[] splits = br.readLine().split(" ");
-            if ("all".equals(splits[0])) {
-                set.clear();
-                for (int j = 1; j <= 20; j++) {
-                    set.add(j + "");
+        int N = Integer.parseInt(br.readLine());
+        Set<Integer> set = new HashSet<>();
+        while (N-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String order = st.nextToken();
+
+            if (order.equals("add")) {
+                set.add(Integer.parseInt(st.nextToken()));
+            } else if (order.equals("remove")) {
+                set.remove(Integer.parseInt(st.nextToken()));
+            } else if (order.equals("check")) {
+                sb.append(set.contains(Integer.parseInt(st.nextToken())) ? 1 : 0).append("\n");
+            } else if (order.equals("toggle")) {
+                int x = Integer.parseInt(st.nextToken());
+                if (set.contains(x)) {
+                    set.remove(x);
+                } else {
+                    set.add(x);
                 }
-            } else if ("empty".equals(splits[0])) {
+            } else if (order.equals("all")) {
                 set.clear();
-            } else if ("add".equals(splits[0])) {
-                set.add(splits[1]);
-            } else if ("remove".equals(splits[0])) {
-                set.remove(splits[1]);
-            } else if ("check".equals(splits[0])) {
-                result.append(set.contains(splits[1]) ? 1 : 0).append("\n");
-            } else if ("toggle".equals(splits[0])) {
-                boolean isSuccessRemove = set.remove(splits[1]);
-                if (!isSuccessRemove) {
-                    set.add(splits[1]);
+                for (int i = 1; i <= 20; i++) {
+                    set.add(i);
                 }
+            } else {
+                set.clear();
             }
         }
 
-        System.out.println(result);
+        System.out.println(sb);
     }
 }
